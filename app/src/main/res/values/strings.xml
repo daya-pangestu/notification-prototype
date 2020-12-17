@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">notification-prototype</string>
+
+
+    <!--notification channel-->
+    <string name="channel_id_importance">importance_channel_id</string>
+    <string name="channel_name_importance">importance</string>
+    <string name="channel_desc_importance">receive promotional notification</string>
+
+    <string name="channel_id_promotional">promotional_channel_id</string>
+    <string name="channel_name_promotional">promotional</string>
+    <string name="channel_desc_promotional">receive importance notification</string>
+
+
+</resources>
