@@ -22,6 +22,7 @@ class NotificationService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        Timber.i(remoteMessage.toString())
         handleNotification(remoteMessage)
 
     }
@@ -54,20 +55,26 @@ class NotificationService : FirebaseMessagingService() {
                 .setContentTitle(remoteMessage.notification?.title)
                 .setContentText(remoteMessage.notification?.body)
                 .setSmallIcon(R.drawable.kalapa)
-                .setStyle(NotificationCompat.BigPictureStyle()
-                        .bigPicture(
-                                Glide.with(this)
-                                        .asBitmap()
-                                        .load(remoteMessage.notification?.imageUrl ?: "" )
-                                        .submit()
-                                        .get()
-                        )
-                )
                 .setAutoCancel(true)
                 .setGroup(GROUP_KEY_NOTIFICATION)
-                .addAction(R.drawable.ic_baseline_remove_red_eye_24,"detail",pendingIntentViewDetail)
+                .addAction(R.drawable.ic_baseline_remove_red_eye_24, "detail", pendingIntentViewDetail)
                 //.addAction(R.drawable.ic_baseline_link_24,"visit link",pendingIntentViewDetail)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)//support for API level < 24
+
+
+        if (remoteMessage.notification?.imageUrl != null && remoteMessage.notification?.imageUrl.toString().isNotEmpty()) {
+            notificationBuilder.setStyle(NotificationCompat.BigPictureStyle()
+                    .bigPicture(
+                            Glide.with(this)
+                                    .asBitmap()
+                                    .load(remoteMessage.notification?.imageUrl)
+                                    .submit()
+                                    .get()
+                    )
+            )
+        }
+
+
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

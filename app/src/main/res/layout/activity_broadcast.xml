@@ -31,6 +31,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="description" />
@@ -42,6 +43,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ed_url_access"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="url access" />
@@ -84,7 +86,7 @@
                 android:ellipsize="start"
                 android:gravity="center"
                 android:maxLines="2"
-                android:text="image with ratio 2:1"
+                android:text="image with 2:1 ratio"
                 android:textColor="#454545"
                 app:layout_constraintBottom_toBottomOf="@id/btn_browse_img"
                 app:layout_constraintEnd_toStartOf="@id/view_center_guideline"
@@ -169,34 +171,7 @@
             android:id="@+id/chip_group_topic"
             style="@style/Widget.MaterialComponents.ChipGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_umum"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:checked="true"
-                android:text="umum" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_matkul"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="mata Kuliah" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_laborat"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="laboratorium" />
-
-        </com.google.android.material.chip.ChipGroup>
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/btn_broadcast"

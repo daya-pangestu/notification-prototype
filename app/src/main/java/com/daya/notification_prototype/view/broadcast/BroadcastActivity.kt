@@ -1,32 +1,44 @@
 package com.daya.notification_prototype.view.broadcast
 
 import android.content.Intent
-import android.opengl.Visibility
+import android.graphics.Color
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
-import androidx.core.view.get
 import com.bumptech.glide.Glide
 import com.daya.notification_prototype.R
+import com.daya.notification_prototype.data.broadcast.Info
 import com.daya.notification_prototype.databinding.ActivityBroadcastBinding
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode
 import com.esafirm.imagepicker.model.Image
+import com.github.razir.progressbutton.attachTextChangeAnimator
+import com.github.razir.progressbutton.bindProgressButton
+import com.github.razir.progressbutton.hideProgress
+import com.github.razir.progressbutton.showProgress
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
-import timber.log.Timber
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import kotlin.random.Random
 
-
+@AndroidEntryPoint
 class BroadcastActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBroadcastBinding
+    val viewmodel by viewModels<BroadcastViewModel>()
+
+    @Inject lateinit var random : Random.Default
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBroadcastBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        bindProgressButton(binding.btnBroadcast)
+        binding.btnBroadcast.attachTextChangeAnimator()
+
         isImgChoosen(false)
             binding.btnBrowseImg.setOnClickListener {
                 ImagePicker.create(this@BroadcastActivity)
@@ -37,14 +49,11 @@ class BroadcastActivity : AppCompatActivity() {
                         .start()
             }
 
-        binding.edTitle.setOnClickListener{
-            binding.chipGroupTopic.children
-                    .toList()
-                    .map { it as Chip }
-                    .filter { it.isChecked }
-                    .forEach {
-                        Timber.d("chip name ${it.text}")
-                    }
+
+        viewmodel.topicLivedata.observe(this){ topics ->
+            topics.forEach { topic ->
+                binding.chipGroupTopic.addView(buildChip(topic.topicName,topic.topicId))
+            }
         }
 
         binding.btnDelImg.setOnClickListener {
@@ -52,6 +61,53 @@ class BroadcastActivity : AppCompatActivity() {
             isImgChoosen(false)
         }
 
+        binding.btnBroadcast.setOnClickListener {
+            val titleText = binding.edTitle.text.toString()
+            val descText = binding.edDesc.text.toString()
+            val urlAccess = binding.edUrlAccess.text.toString()
+
+            val choosenTopics = binding.chipGroupTopic.children
+                .toList()
+                .filter {
+                    (it as Chip).isChecked
+                }
+                .map {
+                    (it as Chip).text.toString().replace(" ","_")
+                }
+
+            if (choosenTopics.isEmpty()){
+                Toast.makeText(it.context, "atleast 1 chip must be checked", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (titleText.isEmpty()){
+                Toast.makeText(it.context, "title mustn't empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (descText.isEmpty()){
+                Toast.makeText(it.context, "desc mustn't empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (urlAccess.isEmpty()){
+                Toast.makeText(it.context, "url access mustn't empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            binding.btnBroadcast.showProgress {
+                buttonText = "broadcasting"
+                progressColor = Color.WHITE
+            }
+
+            viewmodel.broadCastInfo(
+                Info(
+                    title = titleText,
+                    description = descText,
+                    urlAccess = urlAccess,
+                    topics = choosenTopics
+                    )
+                )
+
+            binding.btnBroadcast.hideProgress("submited")
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -75,13 +131,13 @@ class BroadcastActivity : AppCompatActivity() {
     }
 
 
-    private fun buildChip(text: String, chipId:String ): Chip {
+    private fun buildChip(text: kotlin.String, id : kotlin.String): Chip {
         return  Chip(ContextThemeWrapper(this@BroadcastActivity,R.style.Widget_MaterialComponents_Chip_Choice)).apply {
             this.text = text
-            setChipBackgroundColorResource(R.color.ef_colorAccent)
-            isCloseIconVisible = true
-            setTextColor(resources.getColor(R.color.white))
+            tag = id
+            isCloseIconVisible = false
             isCheckable = true
+
         }
     }
 
