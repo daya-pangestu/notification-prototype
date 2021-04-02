@@ -23,12 +23,6 @@ constructor(
     }
 
     private fun setTopic() {
-/*        topicLivedata.value = arrayListOf(
-            "umum",
-            "Mata Kuliab",
-            "Laboratorium"
-        )*/
-
          fireStore.collection("topics").get().addOnSuccessListener {querySnapshoot ->
             Timber.d(querySnapshoot.toString())
              val topics = querySnapshoot.documents.map {
@@ -47,13 +41,6 @@ constructor(
 
     fun broadCastInfo(info: Info) {
 
-        fireStore.collection("messages").document().set(info, SetOptions.merge())
-            .addOnSuccessListener {
-                Timber.i("DocumentSnapshot ${info.toString()} successfully written!")
-            }
-            .addOnFailureListener {e ->
-                Timber.i("Error writing document $e" )
-            }
     }
 
 }

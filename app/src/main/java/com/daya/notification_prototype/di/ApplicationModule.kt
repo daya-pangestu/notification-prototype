@@ -35,23 +35,6 @@ class ApplicationModule {
             .build()
     }
 
-//    @Provides
-//    fun providesNewsStore(firestoreDataSource : FirestoreDataSource, db :NotifDatabase ){
-//        return StoreBuilder
-//            .from(
-//                Fetcher.of {
-//                    firestoreDataSource()
-//                },
-//                sourceOfTruth = SourceOfTruth.of(
-//                    reader      = db.newsTopicDao()::getAllNewsWithTopic,
-//                    writer      = db.newsTopicDao()::insertNews,
-//                    delete      = db.newsTopicDao()::deleteNews,
-//                    deleteAll   = db.newsTopicDao()::deleteAllNews,
-//
-//                )
-//            ).build()
-//    }
-
     @Provides
     @Singleton
     fun providesFireStore(): FirebaseFirestore {
