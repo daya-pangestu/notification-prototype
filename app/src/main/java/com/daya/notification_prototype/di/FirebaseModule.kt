@@ -7,6 +7,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import dagger.Provides
 import javax.inject.Singleton
 
@@ -30,7 +31,9 @@ object FirebaseModule {
         return FirebaseMessaging.getInstance()
     }
 
+    @Provides
+    @Singleton
     fun provideStorage() : FirebaseStorage {
-        return FirebaseStorage.getInstance()
+        return Firebase.storage
     }
 }
