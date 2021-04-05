@@ -74,8 +74,6 @@ class NotificationService : FirebaseMessagingService() {
             )
         }
 
-
-
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
