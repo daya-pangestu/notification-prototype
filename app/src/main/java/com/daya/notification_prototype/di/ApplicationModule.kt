@@ -33,27 +33,6 @@ class ApplicationModule {
             .build()
     }
 
-    @Provides
-    @Singleton
-    fun providesFireStore(): FirebaseFirestore {
-        return Firebase.firestore
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuth(): FirebaseAuth {
-        return Firebase.auth
-    }
-
-    @Provides
-    @Singleton
-    fun providesMessaging() :FirebaseMessaging{
-        return FirebaseMessaging.getInstance()
-    }
-
-    fun provideStorage() : FirebaseStorage{
-        return FirebaseStorage.getInstance()
-    }
 
 
 }
