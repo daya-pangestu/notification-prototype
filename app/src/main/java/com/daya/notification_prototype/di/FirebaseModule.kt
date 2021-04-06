@@ -12,7 +12,6 @@ import dagger.Provides
 import javax.inject.Singleton
 
 object FirebaseModule {
-
     @Provides
     @Singleton
     fun providesFireStore(): FirebaseFirestore {
