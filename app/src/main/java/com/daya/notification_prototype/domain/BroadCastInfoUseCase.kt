@@ -3,34 +3,92 @@ package com.daya.notification_prototype.domain
 import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.broadcast.Info
 import com.daya.notification_prototype.data.broadcast.datasource.BroadcastRepository
+import com.daya.notification_prototype.di.DefaultDispatcher
 import com.daya.notification_prototype.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 
 class BroadCastInfoUseCase
 @Inject
 constructor(
-    private val repo : BroadcastRepository,
-    @IoDispatcher coroutineDispatcher: CoroutineDispatcher
-) : FlowUseCase<Info, Void?>(coroutineDispatcher) {
+    private val repo: BroadcastRepository,
+    @IoDispatcher coroutineDispatcher: CoroutineDispatcher,
+    @DefaultDispatcher private val readFileDispatcher: CoroutineDispatcher
+) : FlowUseCase<Info, Unit>(coroutineDispatcher) {
 
-    override fun execute(param: Info): Flow<Resource<Void?>> = flow {
-        emit(Resource.loading())
-        if (param.urlImage.isNullOrEmpty()) {
-            emit(Resource.loading(progress = "broadcasting without Img"))
-            val casted = repo.broadCastWithOutImg(param).let {
-                Resource.success(it)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun execute(param: Info): Flow<Resource<Unit>> = callbackFlow<Resource<Unit>> {
+        val isImageNotExist = param.urlImage.isNullOrEmpty()
+        offer(
+            Resource.loading(
+                if (isImageNotExist) "BroadCasting With Img" else "BroadCasting Without Img"
+            )
+        )
+        if (isImageNotExist) {
+            val casted = repo.broadCastWithOutImg(param)
+            val resCasted = casted!!.let {
+                Resource.success(Unit)
             }
-            emit(casted)
+            offer(resCasted)
         } else {
-            emit(Resource.loading(progress = "broadcasting with Img"))
-            val casted = repo.broadCastWithImg(param).let {
-                Resource.success(it)
+            val stringImage = param.urlImage!!
+            val fileImage = File(stringImage)
+
+            val streamImageLocal = withContext(readFileDispatcher) {
+                repo.getImageIstreamFromUri(stringImage) // it should be nonNull
             }
-            emit(casted)
+
+            val uploadedName = "${System.currentTimeMillis()}_${fileImage.name}"
+
+            val uploadedImageRef = repo.addChild(uploadedName)
+
+            val uploadTask = uploadedImageRef.putStream(streamImageLocal)
+                .addOnProgressListener { taskSnapshot ->
+                    val progress: Double =
+                        100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
+                    offer(Resource.loading(progress = "uploading img: $progress"))
+                }
+                .addOnFailureListener {
+                    offer(Resource.error(it.localizedMessage)) // it should get cought by flowUseCase
+                }
+                .addOnSuccessListener {
+                    offer(Resource.loading(progress = "image uploaded"))
+                }
+
+            val uriImageCloud = uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        offer(Resource.error(it.localizedMessage))
+                    }
+                }
+                uploadedImageRef.downloadUrl
+            }.await() ?: offer(Resource.error(" failed to upload image"))
+
+            val infoWithDownloadUri = param.apply {
+                urlImage = uriImageCloud.toString()
+            }
+            val casted = repo.broadCastWithImg(infoWithDownloadUri)
+                .addOnCompleteListener {task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            offer(Resource.error(it.localizedMessage))
+                        }
+                    }
+
+                    this.offer(Resource.success(Unit))
+                }
+
+            awaitClose {
+                if (uploadTask.isInProgress || uploadTask.isPaused) uploadTask.cancel()
+            }
         }
     }
 }

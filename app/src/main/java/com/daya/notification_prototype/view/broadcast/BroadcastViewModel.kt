@@ -1,25 +1,37 @@
 package com.daya.notification_prototype.view.broadcast
 
-import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.broadcast.Info
 import com.daya.notification_prototype.data.broadcast.Topic
+import com.daya.notification_prototype.domain.BroadCastInfoUseCase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
+import javax.inject.Inject
 
+@HiltViewModel
 class BroadcastViewModel
-@ViewModelInject
+@Inject
 constructor(
-        val fireStore: FirebaseFirestore
+    private val fireStore: FirebaseFirestore,
+    private val broadCastInfoUseCase: BroadCastInfoUseCase
 ) :ViewModel() {
 
     val topicLivedata: MutableLiveData<List<Topic>> = MutableLiveData()
-    val subscribing : MutableLiveData<Result<Unit>> = MutableLiveData()
+
+    private val _broadcastInfoLiveData = MutableLiveData<Info>()
+
+    val broadcastinfoLiveData = _broadcastInfoLiveData.switchMap { info ->
+        liveData<Resource<Unit>> {
+            val broadCastedRes = broadCastInfoUseCase(info)
+            emitSource(broadCastedRes.asLiveData())
+        }
+    }
 
     init {
         setTopic()
+
     }
 
     private fun setTopic() {
@@ -32,7 +44,10 @@ constructor(
                  Topic(topicId = topid, topicName = name )
              }
              topicLivedata.value = topics
-        }
+        }.addOnFailureListener {
+             Timber.d(it.localizedMessage)
+
+         }
     }
     //TODO getTopic from firestore
     fun getTopic(): MutableLiveData<List<Topic>> {
@@ -40,7 +55,7 @@ constructor(
     }
 
     fun broadCastInfo(info: Info) {
-
+        _broadcastInfoLiveData.value = info
     }
 
 }

@@ -10,6 +10,7 @@
     <string name="channel_id_promotional">promotional_channel_id</string>
     <string name="channel_name_promotional">promotional</string>
     <string name="channel_desc_promotional">receive importance notification</string>
+    <string name="img_name">name: %s</string>
 
 
 </resources>

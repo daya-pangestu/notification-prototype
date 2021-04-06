@@ -6,7 +6,7 @@ sealed class Resource<out T> {
     data class Loading(var progress : String? = null): Resource<Nothing>()
 
     companion object {
-        fun loading(progress: String? = "") = Loading()
+        fun loading(progress: String? = "") = Loading(progress = progress)
         fun <T> success(data: T) = Success(data)
         fun error(message: String?) = Error(message)
     }

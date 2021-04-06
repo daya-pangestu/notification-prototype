@@ -1,4 +1,4 @@
-package com.daya.githubuser.di.util
+package com.daya.notification_prototype.di
 
 import com.daya.notification_prototype.di.DefaultDispatcher
 import com.daya.notification_prototype.di.IoDispatcher
