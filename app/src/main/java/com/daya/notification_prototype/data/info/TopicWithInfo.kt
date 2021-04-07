@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.data.broadcast
+package com.daya.notification_prototype.data.info
 
 import androidx.room.Embedded
 import androidx.room.Relation

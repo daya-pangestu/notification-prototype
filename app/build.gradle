@@ -82,7 +82,6 @@ dependencies {
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
     kapt 'androidx.hilt:hilt-compiler:1.0.0-beta01'
 
-
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'com.github.esafirm.android-image-picker:imagepicker:2.4.1'
@@ -91,8 +90,9 @@ dependencies {
 
     implementation 'com.google.android:flexbox:2.0.1'
 
-
     implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
+
+    implementation "androidx.paging:paging-runtime-ktx:3.0.0-beta03"
 
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.data.broadcast
+package com.daya.notification_prototype.data.info
 
 import androidx.room.*
 import com.google.firebase.firestore.ServerTimestamp
@@ -8,25 +8,24 @@ import kotlin.String
 @Entity(tableName = "news")
 data class InfoEntity(
     @PrimaryKey(autoGenerate = false)
-    val senderId :String,
+    var senderId :String,
     val title : String,
     val description : String,
     val urlAccess : String,
-    val urlImage : String? = null,
+    var urlImage : String = "",
     val status : String,
-    //define one to many relationship
-    val topicForeignId :Int
+    val topics: List<String>,
+    val broadcastRequested: Date? = null
 )
 
 data class Info(
-    val senderId: String? = null,
+    val senderId: String = "",
     val title: String,
     val description: String,
     val urlAccess: String,
-    var urlImage: String? = null,
+    var urlImage: String = "",
     val status: String = "requested",
     val topics: List<String>,
     @ServerTimestamp
     val broadcastRequested: Date? = null
 )
-

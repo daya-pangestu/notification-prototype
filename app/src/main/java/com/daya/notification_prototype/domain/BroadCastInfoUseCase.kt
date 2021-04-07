@@ -1,10 +1,11 @@
 package com.daya.notification_prototype.domain
 
 import com.daya.notification_prototype.data.Resource
-import com.daya.notification_prototype.data.broadcast.Info
+import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.data.broadcast.datasource.BroadcastRepository
 import com.daya.notification_prototype.di.DefaultDispatcher
 import com.daya.notification_prototype.di.IoDispatcher
+import com.daya.notification_prototype.util.mapToEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -26,20 +27,22 @@ constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(param: Info): Flow<Resource<Unit>> = callbackFlow<Resource<Unit>> {
-        val isImageNotExist = param.urlImage.isNullOrEmpty()
+        val infoEntity = param.mapToEntity()
+
+        val isImageNotExist = infoEntity.urlImage.isEmpty()
         offer(
             Resource.loading(
                 if (isImageNotExist) "BroadCasting With Img" else "BroadCasting Without Img"
             )
         )
         if (isImageNotExist) {
-            val casted = repo.broadCastWithOutImg(param)
+            val casted = repo.broadCastWithOutImg(infoEntity)
             val resCasted = casted!!.let {
                 Resource.success(Unit)
             }
             offer(resCasted)
         } else {
-            val stringImage = param.urlImage!!
+            val stringImage = infoEntity.urlImage
             val fileImage = File(stringImage)
 
             val streamImageLocal = withContext(readFileDispatcher) {
@@ -72,17 +75,16 @@ constructor(
                 uploadedImageRef.downloadUrl
             }.await() ?: offer(Resource.error(" failed to upload image"))
 
-            val infoWithDownloadUri = param.apply {
+            val infoWithDownloadUri = infoEntity.apply {
                 urlImage = uriImageCloud.toString()
             }
-            val casted = repo.broadCastWithImg(infoWithDownloadUri)
+            repo.broadCastWithImg(infoWithDownloadUri)
                 .addOnCompleteListener {task ->
                     if (!task.isSuccessful) {
                         task.exception?.let {
                             offer(Resource.error(it.localizedMessage))
                         }
                     }
-
                     this.offer(Resource.success(Unit))
                 }
 

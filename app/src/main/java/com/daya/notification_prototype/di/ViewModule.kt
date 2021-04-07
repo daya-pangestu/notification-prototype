@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.view.main.di_modules
+package com.daya.notification_prototype.di
 
 import dagger.Module
 import dagger.Provides

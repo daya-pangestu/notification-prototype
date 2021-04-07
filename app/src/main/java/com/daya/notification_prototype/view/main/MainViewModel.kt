@@ -1,11 +1,15 @@
 package com.daya.notification_prototype.view.main
 
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.daya.notification_prototype.data.broadcast.Topic
+import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.daya.notification_prototype.data.info.Info
+import com.daya.notification_prototype.data.info.Topic
+import com.daya.notification_prototype.domain.InfoPagingUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -13,13 +17,21 @@ import javax.inject.Inject
 class MainViewModel
 @Inject
 constructor(
-    private val fireStore: FirebaseFirestore
+    private val fireStore: FirebaseFirestore,
+    private val infoPagingUseCase: InfoPagingUseCase
 ) : ViewModel() {
 
-    val topicLivedata: MutableLiveData<List<Topic>> = MutableLiveData()
+    val topicLiveData: MutableLiveData<List<Topic>> = MutableLiveData()
 
     init {
         setTopic()
+    }
+
+    private val _infoPagingFlow = infoPagingUseCase()
+        .cachedIn(viewModelScope)
+
+    fun infoPagingLiveData(): Flow<PagingData<Info>> {
+        return _infoPagingFlow
     }
 
     private fun setTopic() {
@@ -31,7 +43,7 @@ constructor(
 
                 Topic(topicId = topid, topicName = name)
             }
-            topicLivedata.value = topics
+            topicLiveData.value = topics
         }
 
     }

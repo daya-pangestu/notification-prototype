@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.ContextThemeWrapper
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -14,7 +13,7 @@ import androidx.core.view.children
 import com.bumptech.glide.Glide
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.data.Resource
-import com.daya.notification_prototype.data.broadcast.Info
+import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.databinding.ActivityBroadcastBinding
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode
