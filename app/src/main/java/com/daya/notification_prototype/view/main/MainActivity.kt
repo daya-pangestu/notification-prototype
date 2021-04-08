@@ -34,8 +34,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         viewModel.topicLiveData.observe(this){ topics :List<Topic> ->
             topics.forEach { topic ->
                messaging.subscribeToTopic(topic.topicName).addOnCompleteListener { task ->

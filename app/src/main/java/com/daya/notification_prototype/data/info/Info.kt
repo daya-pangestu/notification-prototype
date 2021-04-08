@@ -1,8 +1,10 @@
 package com.daya.notification_prototype.data.info
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.Ignore
 import com.google.firebase.firestore.ServerTimestamp
-import java.util.*
+import java.util.Date
 import kotlin.String
 
 @Entity(tableName = "news")
@@ -14,6 +16,7 @@ data class InfoEntity(
     val urlAccess : String,
     var urlImage : String = "",
     val status : String,
+    @Ignore
     val topics: List<String>,
     val broadcastRequested: Date? = null
 )

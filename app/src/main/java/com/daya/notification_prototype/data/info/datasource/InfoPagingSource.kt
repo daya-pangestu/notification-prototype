@@ -5,8 +5,9 @@ import com.daya.notification_prototype.data.info.InfoEntity
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
-import com.google.type.Date
 import kotlinx.coroutines.tasks.await
+import java.text.DateFormat
+import java.util.*
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -19,7 +20,7 @@ constructor(
     override suspend fun load(params: LoadParams<Date>): LoadResult<Date, InfoEntity> {
         try {
             // Start refresh at page 1 if undefined.
-            val nextPageNumber = params.key ?: Date.getDefaultInstance()
+            val nextPageNumber = params.key ?: DateFormat.getDateInstance().parse()
 
             val batch = inforef
                 .orderBy("broadcastRequested", Query.Direction.DESCENDING)
