@@ -1,6 +1,5 @@
 package com.daya.notification_prototype.data.topic
 
-import com.daya.notification_prototype.data.info.Topic
 import javax.inject.Inject
 
 class TopicRepository

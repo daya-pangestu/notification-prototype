@@ -15,10 +15,7 @@ class InfoPagingUseCase
 )  {
 
     operator fun invoke(): Flow<PagingData<Info>> {
-        return repo.infoPagingSource().map { pagingData ->
-            pagingData.map { infoEntity ->
-                infoEntity.mapToPojo()
-            }
-        }
+        return repo.infoPagingSource()
+
     }
 }

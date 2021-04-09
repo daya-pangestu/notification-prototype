@@ -11,7 +11,6 @@ fun Info.mapToEntity(): InfoEntity {
         description = description,
         urlImage = urlImage,
         status = status,
-        topics = topics,
         broadcastRequested = broadcastRequested
     )
 }
@@ -24,7 +23,6 @@ fun InfoEntity.mapToPojo(): Info {
         description = description,
         urlImage = urlImage,
         status = status,
-        topics = topics,
         broadcastRequested = broadcastRequested
     )
 }

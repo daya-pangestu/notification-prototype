@@ -1,6 +1,5 @@
 package com.daya.notification_prototype.data.topic
 
-import com.daya.notification_prototype.data.info.Topic
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await

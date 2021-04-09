@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.daya.notification_prototype.data.info.Info
-import com.daya.notification_prototype.data.info.Topic
+import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.domain.InfoPagingUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.data.info
+package com.daya.notification_prototype.data.topic
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -6,8 +6,8 @@ import kotlin.String
 
 @Entity(tableName = "topic")
 data class TopicEntity(
-    @PrimaryKey(autoGenerate = true)
-    val topicId :Int,
+    @PrimaryKey(autoGenerate = false)
+    val topicId :String,
     val topicName : String,
 )
 

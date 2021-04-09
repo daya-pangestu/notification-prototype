@@ -3,7 +3,7 @@ package com.daya.notification_prototype.view.broadcast
 import androidx.lifecycle.*
 import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.info.Info
-import com.daya.notification_prototype.data.info.Topic
+import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.domain.BroadCastInfoUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel

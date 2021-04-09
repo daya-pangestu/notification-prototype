@@ -1,12 +1,15 @@
 package com.daya.notification_prototype.data.info.datasource
 
 import androidx.paging.*
+import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.data.info.InfoEntity
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 import java.text.DateFormat
+import java.time.Instant
+import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 
@@ -15,21 +18,23 @@ class InfoPagingSource
 @Inject
 constructor(
     private val inforef: CollectionReference
-) : PagingSource<Date, InfoEntity>() {
+) : PagingSource<Date, Info>() {
 
-    override suspend fun load(params: LoadParams<Date>): LoadResult<Date, InfoEntity> {
+    override suspend fun load(params: LoadParams<Date>): LoadResult<Date, Info> {
         try {
             // Start refresh at page 1 if undefined.
-            val nextPageNumber = params.key ?: DateFormat.getDateInstance().parse()
+            val nextPageNumber = params.key ?: Date()
 
             val batch = inforef
-                .orderBy("broadcastRequested", Query.Direction.DESCENDING)
-                .limit(50)
-                .get()
-                .await()
+                    .orderBy("broadcastRequested", Query.Direction.DESCENDING)
+                    .limit(20)
+                    .startAfter(nextPageNumber)
+                    .get()
+                    .await()
 
             val listInfoEntity = batch.documents.map {
-                it.toObject<InfoEntity>()!!.apply {
+                //throw error java.lang.reflect.InvocationTargetException
+                it.toObject<Info>()!!.apply {
                     senderId = it.id
                 }
             }
@@ -44,6 +49,6 @@ constructor(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Date, InfoEntity>): Date? = null
+    override fun getRefreshKey(state: PagingState<Date, Info>): Date? = null
 
 }

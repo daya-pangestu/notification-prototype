@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.daya.notification_prototype.R
-import com.daya.notification_prototype.data.info.Topic
+import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.databinding.ActivityMainBinding
 import com.daya.notification_prototype.view.broadcast.BroadcastActivity
 import com.google.firebase.messaging.FirebaseMessaging

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.info.Info
+import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.databinding.ActivityBroadcastBinding
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode
@@ -75,7 +76,11 @@ class BroadcastActivity : AppCompatActivity() {
                         (it as Chip).isChecked
                     }
                     .map {
-                        (it as Chip).text.toString().replace(" ","_")
+                        val stringTopic = (it as Chip).text.toString().replace(" ", "_")
+                        Topic(
+                                topicName = stringTopic,
+                                topicId = it.tag as String
+                        )
                     }
 
                 if (chosenTopics.isEmpty()){
