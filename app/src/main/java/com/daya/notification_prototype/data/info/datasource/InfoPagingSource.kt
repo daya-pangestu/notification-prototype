@@ -1,15 +1,10 @@
 package com.daya.notification_prototype.data.info.datasource
 
 import androidx.paging.*
-import com.daya.notification_prototype.data.info.Info
-import com.daya.notification_prototype.data.info.InfoEntity
+import com.daya.notification_prototype.data.info.InfoNet
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
-import java.text.DateFormat
-import java.time.Instant
-import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 
@@ -18,9 +13,9 @@ class InfoPagingSource
 @Inject
 constructor(
     private val inforef: CollectionReference
-) : PagingSource<Date, Info>() {
+) : PagingSource<Date, InfoNet>() {
 
-    override suspend fun load(params: LoadParams<Date>): LoadResult<Date, Info> {
+    override suspend fun load(params: LoadParams<Date>): LoadResult<Date, InfoNet> {
         try {
             // Start refresh at page 1 if undefined.
             val nextPageNumber = params.key ?: Date()
@@ -32,15 +27,19 @@ constructor(
                     .get()
                     .await()
 
-            val listInfoEntity = batch.documents.map {
+
+            val listInfoEntity  = batch.documents.map {
                 //throw error java.lang.reflect.InvocationTargetException
-                it.toObject<Info>()!!.apply {
+                it.toObject(InfoNet::class.java).apply {
+                    this ?: return@apply
                     senderId = it.id
                 }
             }
 
+            val nonNUllList : List<InfoNet> = listInfoEntity as List<InfoNet>
+
             return LoadResult.Page(
-                data = listInfoEntity,
+                data = nonNUllList,
                 prevKey = null, // Only paging forward.
                 nextKey = nextPageNumber
             )
@@ -49,6 +48,10 @@ constructor(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Date, Info>): Date? = null
+    override fun getRefreshKey(state: PagingState<Date, InfoNet>): Date? {
+        val lastPosition = state.anchorPosition ?: return null
+        val lastFetchedInfo = state.closestItemToPosition(lastPosition)
+        return lastFetchedInfo?.broadcastRequested
+    }
 
 }

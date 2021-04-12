@@ -3,9 +3,10 @@ package com.daya.notification_prototype.domain
 import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.data.broadcast.datasource.BroadcastRepository
+import com.daya.notification_prototype.data.info.InfoEntity
+import com.daya.notification_prototype.data.info.InfoNet
 import com.daya.notification_prototype.di.DefaultDispatcher
 import com.daya.notification_prototype.di.IoDispatcher
-import com.daya.notification_prototype.util.mapToEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -27,22 +28,31 @@ constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(param: Info): Flow<Resource<Unit>> = callbackFlow<Resource<Unit>> {
-        val infoEntity = param.mapToEntity()
+        val infoNet = InfoNet(
+            senderId = param.senderId,
+            title = param.title,
+            urlAccess = param.urlAccess,
+            description = param.description,
+            urlImage = param.urlImage,
+            status = param.status,
+            topics = param.topics,
+            broadcastRequested = param.broadcastRequested
+        )
 
-        val isImageNotExist = infoEntity.urlImage.isEmpty()
+        val isImageNotExist = infoNet.urlImage.isEmpty()
         offer(
             Resource.loading(
                 if (isImageNotExist) "BroadCasting With Img" else "BroadCasting Without Img"
             )
         )
         if (isImageNotExist) {
-            val casted = repo.broadCastWithOutImg(infoEntity)
+            val casted = repo.broadCastWithOutImg(infoNet)
             val resCasted = casted!!.let {
                 Resource.success(Unit)
             }
             offer(resCasted)
         } else {
-            val stringImage = infoEntity.urlImage
+            val stringImage = infoNet.urlImage
             val fileImage = File(stringImage)
 
             val streamImageLocal = withContext(readFileDispatcher) {
@@ -75,7 +85,7 @@ constructor(
                 uploadedImageRef.downloadUrl
             }.await() ?: offer(Resource.error(" failed to upload image"))
 
-            val infoWithDownloadUri = infoEntity.apply {
+            val infoWithDownloadUri = infoNet.apply {
                 urlImage = uriImageCloud.toString()
             }
             repo.broadCastWithImg(infoWithDownloadUri)

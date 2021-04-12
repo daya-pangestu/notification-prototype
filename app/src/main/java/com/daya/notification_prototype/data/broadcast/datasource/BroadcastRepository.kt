@@ -1,6 +1,6 @@
 package com.daya.notification_prototype.data.broadcast.datasource
 
-import com.daya.notification_prototype.data.info.InfoEntity
+import com.daya.notification_prototype.data.info.InfoNet
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.StorageReference
 import java.io.FileInputStream
@@ -18,11 +18,11 @@ constructor(
         return firebaseBroadCastDataSource.addChild(filename)
     }
 
-    suspend fun broadCastWithOutImg(info: InfoEntity): Void? {
+    suspend fun broadCastWithOutImg(info: InfoNet): Void? {
         return firebaseBroadCastDataSource.broadCastInfoWithoutImg(info)
     }
 
-    suspend fun broadCastWithImg(info: InfoEntity): Task<Void> {
+    suspend fun broadCastWithImg(info: InfoNet): Task<Void> {
         return firebaseBroadCastDataSource.broadCastInfoWithImg(info)
     }
 

@@ -1,6 +1,6 @@
 package com.daya.notification_prototype.data.broadcast.datasource
 
-import com.daya.notification_prototype.data.info.InfoEntity
+import com.daya.notification_prototype.data.info.InfoNet
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -12,11 +12,11 @@ import javax.inject.Inject
 
 interface BroadCastDataSource {
 
-    suspend fun broadCastInfoWithoutImg(info : InfoEntity): Void?
+    suspend fun broadCastInfoWithoutImg(info : InfoNet): Void?
 
     fun addChild(filename :String): StorageReference
     fun readFile(uriImage: String): FileInputStream
-    suspend fun broadCastInfoWithImg(info: InfoEntity): Task<Void>
+    suspend fun broadCastInfoWithImg(info: InfoNet): Task<Void>
 
 }
 class FirebaseBroadCastDataSource
@@ -25,7 +25,7 @@ constructor(
     private val fireStore: FirebaseFirestore,
     private val imageRef : StorageReference
 ) : BroadCastDataSource {
-    override suspend  fun broadCastInfoWithoutImg(info: InfoEntity): Void? {
+    override suspend  fun broadCastInfoWithoutImg(info: InfoNet): Void? {
         return fireStore.collection("messages").document().set(info, SetOptions.merge()).await()
     }
 
@@ -39,7 +39,7 @@ constructor(
     }
 
 
-    override suspend fun broadCastInfoWithImg(info: InfoEntity): Task<Void> {
+    override suspend fun broadCastInfoWithImg(info: InfoNet): Task<Void> {
         return fireStore.collection("messages").document().set(info, SetOptions.merge())
     }
 }
