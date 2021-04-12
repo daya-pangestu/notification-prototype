@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.domain
+package com.daya.notification_prototype.domain.broadcast
 
 import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.info.Info
@@ -7,6 +7,7 @@ import com.daya.notification_prototype.data.info.InfoEntity
 import com.daya.notification_prototype.data.info.InfoNet
 import com.daya.notification_prototype.di.DefaultDispatcher
 import com.daya.notification_prototype.di.IoDispatcher
+import com.daya.notification_prototype.domain.FlowUseCase
 import com.daya.notification_prototype.util.mapper.TopicMapper.mapGeneralToString
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi

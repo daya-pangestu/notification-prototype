@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.domain
+package com.daya.notification_prototype.domain.pref
 
 import com.daya.notification_prototype.data.settings.SettingRepository
 import javax.inject.Inject

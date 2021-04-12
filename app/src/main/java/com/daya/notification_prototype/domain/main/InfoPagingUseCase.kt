@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.domain
+package com.daya.notification_prototype.domain.main
 
 import androidx.paging.PagingData
 import androidx.paging.map

@@ -1,8 +1,9 @@
-package com.daya.notification_prototype.domain
+package com.daya.notification_prototype.domain.settings
 
 import com.daya.notification_prototype.data.settings.SettingRepository
 import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.di.IoDispatcher
+import com.daya.notification_prototype.domain.UseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
