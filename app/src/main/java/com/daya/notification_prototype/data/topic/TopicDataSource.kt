@@ -7,7 +7,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 interface TopicDataSource {
-    suspend fun getDefaultTopic(): List<Topic>
+    suspend fun getDefaultTopic(): List<TopicNet>
     fun subscribeToTopic(topic : Topic)
     fun unsubscribeToTopic(topic: Topic)
 }
@@ -18,12 +18,12 @@ constructor(
     private val firestore: FirebaseFirestore,
     private val messaging : FirebaseMessaging
 ) : TopicDataSource{
-    override suspend fun getDefaultTopic(): List<Topic> {
+    override suspend fun getDefaultTopic(): List<TopicNet> {
         val querySnapshot = firestore.collection("topics").get().await()
         return querySnapshot.documents.asSequence().map {
             val topicId = it.id
             val name = it.data?.get("topicName").toString()
-            Topic(topicId = topicId, topicName = name)
+            TopicNet(topicId = topicId, topicName = name)
         }.toList()
     }
 
