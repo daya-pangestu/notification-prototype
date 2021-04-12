@@ -18,7 +18,7 @@ class MainViewModel
 @Inject
 constructor(
     private val fireStore: FirebaseFirestore,
-    private val infoPagingUseCase: InfoPagingUseCase
+    infoPagingUseCase: InfoPagingUseCase
 ) : ViewModel() {
 
     val topicLiveData: MutableLiveData<List<Topic>> = MutableLiveData()
