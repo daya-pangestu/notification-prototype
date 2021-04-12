@@ -57,4 +57,35 @@ object TopicMapper : Mapper<Topic,TopicNet,TopicEntity> {
             )
         }
     }
+
+
+    fun List<String>.mapStringToGeneral(): List<Topic> {
+        return this.map { topicName ->
+            Topic(
+                    topicId = "",
+                    topicName = topicName
+            )
+        }
+    }
+
+    fun List<Topic>.mapGeneralToString(): List<String> {
+        return this.map {
+            it.topicName
+        }
+    }
+
+    fun List<String>.mapStringToEntity(): List<TopicEntity> {
+        return this.map {topicName ->
+            TopicEntity(
+                    topicId = "",
+                    topicName = topicName
+            )
+        }
+    }
+
+    fun List<TopicEntity>.mapEntityToString(): List<String> {
+        return this.map {topic ->
+            topic.topicName
+        }
+    }
 }

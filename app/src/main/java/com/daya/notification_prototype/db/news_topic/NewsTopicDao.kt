@@ -37,7 +37,6 @@ abstract class NewsTopicDao {
             .map { info ->
                 info
                     .topics
-                    .mapGeneralToEntity()
             }
             .reduce { acc, list ->
                 val combined = acc + list

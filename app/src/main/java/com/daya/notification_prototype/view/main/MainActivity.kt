@@ -8,12 +8,15 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.map
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.databinding.ActivityMainBinding
 import com.daya.notification_prototype.view.broadcast.BroadcastActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -51,9 +54,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.infoPagingLiveData().collectLatest {
+            viewModel.infoPagingLiveData().collect {
                 infoPagingAdapter.submitData(it)
+
             }
+        }
+
+        binding.rvMain.apply {
+            setHasFixedSize(true)
+            adapter = infoPagingAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity)
         }
     }
 

@@ -5,6 +5,7 @@ import com.daya.notification_prototype.data.info.InfoNet
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
+import java.lang.RuntimeException
 import java.util.*
 import javax.inject.Inject
 
@@ -22,29 +23,24 @@ constructor(
 
             val batch = inforef
                     .orderBy("broadcastRequested", Query.Direction.DESCENDING)
-                    .limit(20)
+                    .limit(10)
                     .startAfter(nextPageNumber)
                     .get()
                     .await()
 
-
-            val listInfoEntity  = batch.documents.map {
-                //throw error java.lang.reflect.InvocationTargetException
+            val listInfoEntity = batch.documents.map {
                 it.toObject(InfoNet::class.java).apply {
                     this ?: return@apply
                     senderId = it.id
                 }
-            }
-
-            val nonNUllList : List<InfoNet> = listInfoEntity as List<InfoNet>
-
+            }.filterNotNull()
             return LoadResult.Page(
-                data = nonNUllList,
-                prevKey = null, // Only paging forward.
-                nextKey = nextPageNumber
+                    data = listInfoEntity,
+                    prevKey = null, // Only paging forward.
+                    nextKey = listInfoEntity.last().broadcastRequested
             )
         } catch (e: Exception) {
-           return LoadResult.Error(e)
+            return LoadResult.Error(e)
         }
     }
 

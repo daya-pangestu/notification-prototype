@@ -9,9 +9,9 @@ import com.bumptech.glide.Glide
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.databinding.ItemInfoBinding
+import timber.log.Timber
 
 class InfoPagingAdapter(private val onItemClick : (Info) -> Unit) : PagingDataAdapter<Info,InfoPagingAdapter.InfoViewHolder>(infoComparator) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InfoViewHolder {
         val binding = ItemInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,6 +20,8 @@ class InfoPagingAdapter(private val onItemClick : (Info) -> Unit) : PagingDataAd
 
     override fun onBindViewHolder(holder: InfoViewHolder, position: Int) {
         val item = getItem(position)
+        Timber.i("judul ${item?.title}")
+
         if (item != null) {
             holder.bind(item,onItemClick)
         } ///todo provide placeholder
@@ -38,7 +40,7 @@ class InfoPagingAdapter(private val onItemClick : (Info) -> Unit) : PagingDataAd
             binding.tvDesc.text = item.description
 
             itemView.setOnClickListener {
-                onItemClick
+                onItemClick(item)
             }
         }
     }

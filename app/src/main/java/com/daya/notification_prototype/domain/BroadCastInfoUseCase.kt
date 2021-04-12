@@ -7,6 +7,7 @@ import com.daya.notification_prototype.data.info.InfoEntity
 import com.daya.notification_prototype.data.info.InfoNet
 import com.daya.notification_prototype.di.DefaultDispatcher
 import com.daya.notification_prototype.di.IoDispatcher
+import com.daya.notification_prototype.util.mapper.TopicMapper.mapGeneralToString
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -35,11 +36,11 @@ constructor(
             description = param.description,
             urlImage = param.urlImage,
             status = param.status,
-            topics = param.topics,
+            topics = param.topics.mapGeneralToString(),
             broadcastRequested = param.broadcastRequested
         )
 
-        val isImageNotExist = infoNet.urlImage.isEmpty()
+        val isImageNotExist = infoNet.urlImage.isNullOrEmpty()
         offer(
             Resource.loading(
                 if (isImageNotExist) "BroadCasting With Img" else "BroadCasting Without Img"
@@ -52,7 +53,7 @@ constructor(
             }
             offer(resCasted)
         } else {
-            val stringImage = infoNet.urlImage
+            val stringImage = infoNet.urlImage ?: ""
             val fileImage = File(stringImage)
 
             val streamImageLocal = withContext(readFileDispatcher) {

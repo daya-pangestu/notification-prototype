@@ -3,6 +3,12 @@ package com.daya.notification_prototype.util.mapper
 import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.data.info.InfoEntity
 import com.daya.notification_prototype.data.info.InfoNet
+import com.daya.notification_prototype.util.mapper.TopicMapper.mapEntityToGeneral
+import com.daya.notification_prototype.util.mapper.TopicMapper.mapEntityToString
+import com.daya.notification_prototype.util.mapper.TopicMapper.mapGeneralToEntity
+import com.daya.notification_prototype.util.mapper.TopicMapper.mapGeneralToString
+import com.daya.notification_prototype.util.mapper.TopicMapper.mapStringToEntity
+import com.daya.notification_prototype.util.mapper.TopicMapper.mapStringToGeneral
 
 object InfoMapper : Mapper<Info,InfoNet,InfoEntity> {
     override fun List<Info>.mapGeneralToNet(): List<InfoNet> {
@@ -14,7 +20,7 @@ object InfoMapper : Mapper<Info,InfoNet,InfoEntity> {
                 urlAccess = it.urlAccess,
                 urlImage = it.urlImage,
                 status = it.status,
-                topics = it.topics,
+                topics = it.topics.mapGeneralToString(),
                 broadcastRequested = it.broadcastRequested
             )
         }
@@ -23,14 +29,14 @@ object InfoMapper : Mapper<Info,InfoNet,InfoEntity> {
     override fun List<Info>.mapGeneralToEntity(): List<InfoEntity> {
         return this.map {
             InfoEntity(
-                senderId = it.senderId,
-                title = it.title,
-                description = it.description,
-                urlAccess = it.urlAccess,
-                urlImage = it.urlImage,
-                status = it.status,
-                topics = it.topics,
-                broadcastRequested = it.broadcastRequested
+                    senderId = it.senderId ?: "",
+                    title = it.title,
+                    description = it.description,
+                    urlAccess = it.urlAccess,
+                    urlImage = it.urlImage,
+                    status = it.status,
+                    topics = it.topics.mapGeneralToEntity(),
+                    broadcastRequested = it.broadcastRequested
             )
         }
     }
@@ -42,9 +48,9 @@ object InfoMapper : Mapper<Info,InfoNet,InfoEntity> {
                 title = it.title,
                 description = it.description,
                 urlAccess = it.urlAccess,
-                urlImage = it.urlImage,
+                urlImage = it.urlImage ?: "",
                 status = it.status,
-                topics = it.topics,
+                topics = it.topics.mapStringToGeneral(),
                 broadcastRequested = it.broadcastRequested
             )
         }
@@ -53,14 +59,14 @@ object InfoMapper : Mapper<Info,InfoNet,InfoEntity> {
     override fun List<InfoNet>.mapNetToEntity(): List<InfoEntity> {
         return this.map {
             InfoEntity(
-                senderId = it.senderId,
-                title = it.title,
-                description = it.description,
-                urlAccess = it.urlAccess,
-                urlImage = it.urlImage,
-                status = it.status,
-                topics = it.topics,
-                broadcastRequested = it.broadcastRequested
+                    senderId = it.senderId ?: "",
+                    title = it.title,
+                    description = it.description,
+                    urlAccess = it.urlAccess,
+                    urlImage = it.urlImage ?: "",
+                    status = it.status,
+                    topics = it.topics.mapStringToEntity(),
+                    broadcastRequested = it.broadcastRequested
             )
         }
     }
@@ -74,7 +80,7 @@ object InfoMapper : Mapper<Info,InfoNet,InfoEntity> {
                 urlAccess = it.urlAccess,
                 urlImage = it.urlImage,
                 status = it.status,
-                topics = it.topics,
+                topics = it.topics.mapEntityToGeneral(),
                 broadcastRequested = it.broadcastRequested
             )
         }
@@ -89,7 +95,7 @@ object InfoMapper : Mapper<Info,InfoNet,InfoEntity> {
                 urlAccess = it.urlAccess,
                 urlImage = it.urlImage,
                 status = it.status,
-                topics = it.topics,
+                topics = it.topics.mapEntityToString(),
                 broadcastRequested = it.broadcastRequested
             )
         }

@@ -17,7 +17,7 @@ constructor(
 
     fun infoPagingSource(): Flow<PagingData<InfoNet>> {
         return Pager(
-            PagingConfig(pageSize =20)
+            PagingConfig(pageSize =10)
         ){
             infoPagingSource
         }.flow
