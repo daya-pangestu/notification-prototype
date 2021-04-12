@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Notificationprototype">
-        <activity android:name=".view.settings.SettingsActivity"></activity>
+        <activity android:name=".view.SplashActivity"></activity>
+        <activity android:name=".view.settings.SettingsActivity" />
         <activity android:name=".view.broadcast.BroadcastActivity" />
         <activity android:name=".view.main.MainActivity">
             <intent-filter>
