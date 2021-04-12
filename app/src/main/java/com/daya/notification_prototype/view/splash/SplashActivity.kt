@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.view
+package com.daya.notification_prototype.view.splash
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
