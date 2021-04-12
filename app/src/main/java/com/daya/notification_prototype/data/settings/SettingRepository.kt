@@ -7,15 +7,14 @@ import javax.inject.Inject
 class SettingRepository
 @Inject
 constructor(
-        private val pref: SharedPreferences
-
+        private val pref: SharedPreferences?
 ) {
     fun isFirstTime(): Boolean {
-        return pref.getBoolean(IS_FIRST_TIME_KEY,true)
+        return pref?.getBoolean(IS_FIRST_TIME_KEY,true) ?: true
     }
 
     fun setFirstTime(firstTime: Boolean) {
-        pref.edit{
+        pref?.edit{
             putBoolean(IS_FIRST_TIME_KEY, firstTime)
         }
     }
