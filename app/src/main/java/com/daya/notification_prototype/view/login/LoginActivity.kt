@@ -1,6 +1,7 @@
 package com.daya.notification_prototype.view.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.annotation.StringRes
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.daya.notification_prototype.R
@@ -42,11 +44,11 @@ class LoginActivity : AppCompatActivity() {
 
         binding.loginWithSt3.setOnClickListener {
             val intent = requestGSO(DOMAIN_st3).signInIntent
-            openGSO.launch(intent)
+            loginGso.launch(intent)
         }
         binding.loginWithItt.setOnClickListener {
             val intent = requestGSO(DOMAIN_ITT).signInIntent
-            openGSO.launch(intent)
+            loginGso.launch(intent)
         }
     }
 
@@ -59,21 +61,6 @@ class LoginActivity : AppCompatActivity() {
         return GoogleSignIn.getClient(this,gso)
     }
 
-    //need result code for googlesigngin
-    private val openGSO = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // Do something here
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)!!
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Timber.w("Google sign in failed $e")
-            }
-        }
-    }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
@@ -93,8 +80,27 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+    var loginGso = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result ->
+
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Timber.w("Google sign in failed $e")
+                toast("google sign in failed ${e.localizedMessage}")
+            }
+        }
+    }
+
+
+
     companion object {
         private const val DOMAIN_ITT = "ittelkom-pwt.ac.id"
         private const val DOMAIN_st3 = "st3telkom.ac.id"
+
+        private const val GOOGLE_SIGNIN_REQUEST_CODE = 231
     }
 }
