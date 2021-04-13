@@ -9,10 +9,19 @@ import androidx.lifecycle.lifecycleScope
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.view.login.LoginActivity
 import com.daya.notification_prototype.view.main.MainActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+import javax.inject.Inject
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
+    private var isUserLogin = false
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(window) {
@@ -24,7 +33,6 @@ class SplashActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_splash)
 
-        val isUserLogin = false
 
         lifecycleScope.launch {
             delay(2000)
@@ -37,6 +45,11 @@ class SplashActivity : AppCompatActivity() {
             finish()
 
         }
+    }
 
+    override fun onStart() {
+        super.onStart()
+        val account = firebaseAuth.currentUser
+        isUserLogin = account != null
     }
 }
