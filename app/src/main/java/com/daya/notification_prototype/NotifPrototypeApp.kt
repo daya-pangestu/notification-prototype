@@ -2,8 +2,8 @@ package com.daya.notification_prototype
 
 import android.app.Application
 import com.daya.notification_prototype.data.topic.Topic
-import com.daya.notification_prototype.domain.IsFirstTimeUseCase
-import com.daya.notification_prototype.domain.SetFirstTimeUseCase
+import com.daya.notification_prototype.domain.pref.IsFirstTimeUseCase
+import com.daya.notification_prototype.domain.pref.SetFirstTimeUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp

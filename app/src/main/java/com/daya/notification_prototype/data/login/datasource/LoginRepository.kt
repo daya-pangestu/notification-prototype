@@ -2,6 +2,7 @@ package com.daya.notification_prototype.data.login.datasource
 
 import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.login.LoggedInUser
+import javax.inject.Inject
 
 
 /**
@@ -9,7 +10,7 @@ import com.daya.notification_prototype.data.login.LoggedInUser
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val dataSource: LoginDataSource) {
+class LoginRepository @Inject constructor(private val dataSource: LoginDataSource) {
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null

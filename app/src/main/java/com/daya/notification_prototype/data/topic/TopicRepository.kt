@@ -8,7 +8,7 @@ constructor(
     private val topicDataSource: TopicDataSource
 ) {
 
-    suspend fun getDefaultTopic(): List<Topic> {
+    suspend fun getDefaultTopic(): List<TopicNet> {
         return topicDataSource.getDefaultTopic()
     }
 

@@ -4,6 +4,10 @@
     <item android:id="@+id/menu_broadcast"
         android:title="broadcast"
         app:showAsAction="ifRoom"
-        android:iconTint="@android:color/white"
         android:icon="@drawable/ic_baseline_campaign_24"/>
+
+    <item android:id="@+id/menu_settings"
+        android:title="settings"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_settings_24"/>
 </menu>

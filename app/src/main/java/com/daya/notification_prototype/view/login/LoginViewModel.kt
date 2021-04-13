@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.view.ui.login
+package com.daya.notification_prototype.view.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,9 +7,15 @@ import android.util.Patterns
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.login.datasource.LoginRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+@HiltViewModel
+class LoginViewModel
+@Inject
+constructor(
+        private val loginRepository: LoginRepository
+) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm

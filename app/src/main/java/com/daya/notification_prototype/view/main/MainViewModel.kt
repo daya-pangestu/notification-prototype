@@ -4,12 +4,9 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.daya.notification_prototype.data.info.Info
-import com.daya.notification_prototype.data.topic.Topic
-import com.daya.notification_prototype.domain.InfoPagingUseCase
-import com.google.firebase.firestore.FirebaseFirestore
+import com.daya.notification_prototype.domain.main.InfoPagingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel

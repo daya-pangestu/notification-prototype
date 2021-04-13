@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.view.ui.login
+package com.daya.notification_prototype.view.login
 
 /**
  * Data validation state of the login form.

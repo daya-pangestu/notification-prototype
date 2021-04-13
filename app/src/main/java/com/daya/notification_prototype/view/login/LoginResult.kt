@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.view.ui.login
+package com.daya.notification_prototype.view.login
 
 /**
  * Authentication result : success (user details) or error message.

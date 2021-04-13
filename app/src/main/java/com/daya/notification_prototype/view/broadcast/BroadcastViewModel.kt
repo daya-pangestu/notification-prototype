@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.data.topic.Topic
-import com.daya.notification_prototype.domain.BroadCastInfoUseCase
+import com.daya.notification_prototype.domain.broadcast.BroadCastInfoUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber

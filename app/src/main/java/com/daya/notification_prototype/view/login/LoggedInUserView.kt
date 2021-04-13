@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.view.ui.login
+package com.daya.notification_prototype.view.login
 
 /**
  * User details post authentication that is exposed to the UI
