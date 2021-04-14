@@ -18,6 +18,7 @@ import androidx.activity.viewModels
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.databinding.ActivityLoginBinding
 import com.daya.notification_prototype.util.toast
+import com.daya.notification_prototype.view.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -61,7 +62,6 @@ class LoginActivity : AppCompatActivity() {
         return GoogleSignIn.getClient(this,gso)
     }
 
-
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
@@ -70,8 +70,10 @@ class LoginActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Timber.i("signInWithCredential:success")
                     val user = firebaseAuth.currentUser
-                    toast("login successful, ${user?.displayName}", Toast.LENGTH_LONG)
 
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 } else {
                     // If sign in fails, display a message to the user.
                     Timber.i("signInWithCredential:failure ${task.exception}")
@@ -80,9 +82,7 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    var loginGso = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result ->
-
-        if (result.resultCode == Activity.RESULT_OK) {
+    private val loginGso = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
@@ -92,15 +92,12 @@ class LoginActivity : AppCompatActivity() {
                 Timber.w("Google sign in failed $e")
                 toast("google sign in failed ${e.localizedMessage}")
             }
-        }
     }
-
 
 
     companion object {
         private const val DOMAIN_ITT = "ittelkom-pwt.ac.id"
         private const val DOMAIN_st3 = "st3telkom.ac.id"
-
-        private const val GOOGLE_SIGNIN_REQUEST_CODE = 231
+        private const val RC_SIGN_IN = 324
     }
 }

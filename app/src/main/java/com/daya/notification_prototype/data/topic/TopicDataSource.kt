@@ -3,6 +3,8 @@ package com.daya.notification_prototype.data.topic
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -10,6 +12,8 @@ interface TopicDataSource {
     suspend fun getDefaultTopic(): List<TopicNet>
     fun subscribeToTopic(topic : Topic)
     fun unsubscribeToTopic(topic: Topic)
+    fun subscribedTopic() : List<TopicEntity>
+
 }
 
 class FirebaseTopicDataSource
@@ -47,6 +51,10 @@ constructor(
                 }
                 Timber.i(msg)
             }
+    }
+
+    override fun subscribedTopic(): List<TopicEntity> {
+        return emptyList()
     }
 
 }

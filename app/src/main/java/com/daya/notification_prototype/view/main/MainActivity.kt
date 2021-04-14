@@ -7,12 +7,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.databinding.ActivityMainBinding
+import com.daya.notification_prototype.util.toast
 import com.daya.notification_prototype.view.broadcast.BroadcastActivity
 import com.daya.notification_prototype.view.settings.SettingsActivity
 import com.google.firebase.messaging.FirebaseMessaging
@@ -38,17 +42,39 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this@MainActivity, it.title, Toast.LENGTH_SHORT).show()
         }
 
+        infoPagingAdapter.addLoadStateListener { loadState: CombinedLoadStates ->
+            if (loadState.refresh is LoadState.Loading) {
+                binding.progressBar.isVisible = true
+            } else {
+                binding.progressBar.isVisible = false
+
+                val errorState = when {
+                    loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
+                    loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+                    loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
+                    else -> null
+                }
+                errorState?.let {
+                    toast(it.error.toString())
+                }
+            }
+        }
+
+        binding.rvMain.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = infoPagingAdapter.withLoadStateFooter(
+                    footer = InfoPagingLoadingAdapter { infoPagingAdapter.retry() },
+            )
+        }
+
         lifecycleScope.launch {
             viewModel.infoPagingLiveData().collect {
                 infoPagingAdapter.submitData(it)
             }
         }
 
-        binding.rvMain.apply {
-            setHasFixedSize(true)
-            adapter = infoPagingAdapter
-            layoutManager = LinearLayoutManager(this@MainActivity)
-        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

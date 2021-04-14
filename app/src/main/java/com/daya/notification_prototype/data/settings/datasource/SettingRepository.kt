@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.data.settings
+package com.daya.notification_prototype.data.settings.datasource
 
 import android.content.SharedPreferences
 import androidx.core.content.edit

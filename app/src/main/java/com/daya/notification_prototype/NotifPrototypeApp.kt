@@ -5,6 +5,7 @@ import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.domain.pref.IsFirstTimeUseCase
 import com.daya.notification_prototype.domain.pref.SetFirstTimeUseCase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
