@@ -5,6 +5,7 @@ import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.di.IoDispatcher
 import com.daya.notification_prototype.domain.UseCase
 import kotlinx.coroutines.CoroutineDispatcher
+import timber.log.Timber
 import javax.inject.Inject
 
 class GetTopicAndSubscribedStatusUseCase
@@ -18,12 +19,11 @@ constructor(
         val defaultListTopic = repo.getAllTopic()
         val topicWithSubscribedStatus = repo.getSubScribedTopic()
         val commonTopic = defaultListTopic
-            .map {
-                val isCommon = it in topicWithSubscribedStatus
-                Topic(topicId = it.topicId,topicName = it.topicName,isUserSubscribed =isCommon )
+            .map {topicNet ->
+                val isCommon = topicNet.topicName in topicWithSubscribedStatus
+                Topic(topicId = topicNet.topicId,topicName = topicNet.topicName,isUserSubscribed =isCommon,isUnsubscribeAble = topicNet.isUnsubscribeAble)
             }
-
+        Timber.i("comonTopic $commonTopic")
         return commonTopic
     }
-
 }

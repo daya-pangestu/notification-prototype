@@ -17,13 +17,17 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        settingsViewModel.getTopicWithSubscribeStatus.observe(this){
+        settingsViewModel.getTopicWithSubscribedStatusLiveData.observe(this){
             when (it) {
                 is Resource.Loading -> {
 
                 }
-                is Resource.Success -> {}
-                is Resource.Error -> {}
+                is Resource.Success -> {
+
+                }
+                is Resource.Error -> {
+
+                }
 
             }
         }

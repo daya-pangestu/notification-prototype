@@ -30,7 +30,7 @@ constructor(
        return topicDataSource.getDefaultTopic()
     }
 
-    suspend fun getSubScribedTopic(): List<TopicNet> {
+    suspend fun getSubScribedTopic(): List<String> {
         return topicDataSource.getSubscribedTopic()
     }
 }

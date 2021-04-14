@@ -8,7 +8,8 @@ import kotlin.String
 data class TopicNet(
     val topicId : String,
     val topicName : String,
-    var isUserSubscribed: Boolean = false
+    var isUserSubscribed: Boolean = false,
+    var isUnsubscribeAble : Boolean = false
 )
 
 @Entity(tableName = "topic")
@@ -19,9 +20,11 @@ data class TopicEntity(
 )
 
 data class Topic(
-    val topicId : String,
-    val topicName : String,
-    val isUserSubscribed: Boolean = false//TODO ini ter reference di user
+        val topicId: String,
+        val topicName: String,
+        val isUserSubscribed: Boolean = false,//TODO ini ter reference di user
+        val isUnsubscribeAble: Boolean = false
+
 )
 
 
