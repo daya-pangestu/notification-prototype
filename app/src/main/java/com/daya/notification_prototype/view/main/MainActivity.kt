@@ -73,8 +73,6 @@ class MainActivity : AppCompatActivity() {
                 infoPagingAdapter.submitData(it)
             }
         }
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

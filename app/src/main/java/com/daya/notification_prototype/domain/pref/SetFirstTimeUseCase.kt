@@ -1,6 +1,6 @@
 package com.daya.notification_prototype.domain.pref
 
-import com.daya.notification_prototype.data.settings.SettingRepository
+import com.daya.notification_prototype.data.settings.datasource.SettingRepository
 import com.daya.notification_prototype.di.IoDispatcher
 import com.daya.notification_prototype.domain.UseCase
 import kotlinx.coroutines.CoroutineDispatcher

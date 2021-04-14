@@ -1,13 +1,13 @@
 package com.daya.notification_prototype.domain.settings
 
-import com.daya.notification_prototype.data.settings.SettingRepository
+import com.daya.notification_prototype.data.settings.datasource.SettingRepository
 import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.di.IoDispatcher
 import com.daya.notification_prototype.domain.UseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
-class GetTopicAndSubscribedStatus
+class GetTopicAndSubscribedStatusUseCase
 @Inject
 constructor(
     @IoDispatcher coroutineDispatcher: CoroutineDispatcher,
@@ -17,7 +17,6 @@ constructor(
     override suspend fun execute(parameters: Unit): List<Topic> {
         val defaultListTopic = repo.getAllTopic()
         val topicWithSubscribedStatus = repo.getSubScribedTopic()
-
         val commonTopic = defaultListTopic
             .map {
                 val isCommon = it in topicWithSubscribedStatus

@@ -1,6 +1,7 @@
 package com.daya.notification_prototype.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,6 +36,12 @@ object FirebaseModule {
     @Singleton
     fun provideAuth(): FirebaseAuth {
         return Firebase.auth
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseUser(auth: FirebaseAuth): FirebaseUser? {
+        return auth.currentUser
     }
 
     @Provides

@@ -31,6 +31,6 @@ constructor(
     }
 
     suspend fun getSubScribedTopic(): List<TopicNet> {
-        return emptyList()
+        return topicDataSource.getSubscribedTopic()
     }
 }
