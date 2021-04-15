@@ -203,21 +203,6 @@ class BroadcastActivity : AppCompatActivity() {
             imgChosenPic.isVisible = showImage
             btnDelImg.isVisible = showImage
         }
-
-        /*
-        if (choosen) {
-            binding.txtImgRatio.visibility = View.GONE
-            binding.btnBrowseImg.visibility = View.GONE
-
-            binding.imgChosenPic.visibility = View.VISIBLE
-            binding.btnDelImg.visibility = View.VISIBLE
-        } else {
-            binding.txtImgRatio.visibility = View.VISIBLE
-            binding.btnBrowseImg.visibility = View.VISIBLE
-
-            binding.imgChosenPic.visibility = View.GONE
-            binding.btnDelImg.visibility = View.GONE
-        }*/
     }
 
 }

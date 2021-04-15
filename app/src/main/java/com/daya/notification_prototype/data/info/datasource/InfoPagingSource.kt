@@ -43,7 +43,6 @@ constructor(
             return LoadResult.Error(e)
         }
     }
-
     override fun getRefreshKey(state: PagingState<Date, InfoNet>): Date? {
         val lastPosition = state.anchorPosition ?: return null
         val lastFetchedInfo = state.closestItemToPosition(lastPosition)
