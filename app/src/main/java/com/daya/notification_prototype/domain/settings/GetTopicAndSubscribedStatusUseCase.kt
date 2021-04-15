@@ -21,7 +21,7 @@ constructor(
         val commonTopic = defaultListTopic
             .map {topicNet ->
                 val isCommon = topicNet.topicName in topicWithSubscribedStatus
-                Topic(topicId = topicNet.topicId,topicName = topicNet.topicName,isUserSubscribed =isCommon,isUnsubscribeAble = topicNet.isUnsubscribeAble)
+                Topic(topicId = topicNet.topicId,topicName = topicNet.topicName,isUserSubscribe =isCommon,isUnsubscribeAble = topicNet.isUnsubscribeAble)
             }
         Timber.i("comonTopic $commonTopic")
         return commonTopic

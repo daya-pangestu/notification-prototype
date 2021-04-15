@@ -16,7 +16,7 @@ fun Topic.mapToTopicNet(): TopicNet {
     return TopicNet(
             topicId = topicId,
             topicName = topicName,
-            isUserSubscribed = isUserSubscribed,
+            isUserSubscribed = isUserSubscribe,
             isUnsubscribeAble = isUnsubscribeAble
     )
 }

@@ -22,7 +22,7 @@ data class TopicEntity(
 data class Topic(
         val topicId: String,
         val topicName: String,
-        val isUserSubscribed: Boolean = false,//TODO ini ter reference di user
+        val isUserSubscribe: Boolean = false,//TODO ini ter reference di user
         val isUnsubscribeAble: Boolean = false
 
 )

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.databinding.ItemTopicBinding
 
-class TopicAdapter (private val onCheckedChangeListener : (CompoundButton,Boolean) -> Unit): ListAdapter<Topic, TopicAdapter.TopicViewHolder>(topicDiffUtil) {
+class TopicAdapter (private val onCheckedChangeListener : (Topic,CompoundButton,Boolean) -> Unit): ListAdapter<Topic, TopicAdapter.TopicViewHolder>(topicDiffUtil) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicViewHolder {
@@ -22,13 +22,17 @@ class TopicAdapter (private val onCheckedChangeListener : (CompoundButton,Boolea
         holder.bind(item,onCheckedChangeListener)
     }
 
-    inner class TopicViewHolder(val binding: ItemTopicBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Topic, onCheckedChangeListener: (CompoundButton, Boolean) -> Unit) {
+    inner class TopicViewHolder(private val binding: ItemTopicBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Topic, onCheckedChangeListener: (Topic,CompoundButton, Boolean) -> Unit) {
             binding.chipTopic.apply {
                 text = item.topicName
+                isChecked = item.isUserSubscribe
                 isCheckable = item.isUnsubscribeAble
+
+                setOnCheckedChangeListener { buttonView, isChecked ->
+                    onCheckedChangeListener(item, buttonView, isChecked)
+                }
             }
-            binding.chipTopic.setOnCheckedChangeListener(onCheckedChangeListener)
         }
     }
 
