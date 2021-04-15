@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.view.main
+package com.daya.notification_prototype.view.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,9 +14,9 @@ class InfoPagingLoadingAdapter(
 ) : LoadStateAdapter<InfoPagingLoadingAdapter.LoadStateItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState) : LoadStateItemViewHolder {
-        val bin = LayoutLoadingBinding.bind(
+        val binding = LayoutLoadingBinding.bind(
                 LayoutInflater.from(parent.context).inflate(R.layout.layout_loading, parent, false))
-        return LoadStateItemViewHolder(bin,retry)
+        return LoadStateItemViewHolder(binding,retry)
     }
 
 

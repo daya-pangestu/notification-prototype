@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.view.main
+package com.daya.notification_prototype.view.main.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -24,12 +24,11 @@ class InfoPagingAdapter(private val onItemClick : (Info) -> Unit) : PagingDataAd
 
         if (item != null) {
             holder.bind(item,onItemClick)
-        } ///todo provide placeholder
+        }
     }
 
 
     inner class InfoViewHolder(private val binding :  ItemInfoBinding) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: Info, onItemClick: (Info) -> Unit) {
             Glide.with(itemView)
                 .load(item.urlImage)
