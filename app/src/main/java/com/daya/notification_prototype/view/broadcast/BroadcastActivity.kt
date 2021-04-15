@@ -5,12 +5,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.data.Resource
@@ -74,15 +73,15 @@ class BroadcastActivity : AppCompatActivity() {
         }
 
         binding.btnDelImg.setOnClickListener {
-            binding.imgChosenPic.setImageBitmap(null)
-            isImgChosen(false)
+
+            viewModel.deleteUriImage()
         }
 
         binding.btnBroadcast.setOnClickListener {
             val titleText = binding.edTitle.text.toString()
             val descText = binding.edDesc.text.toString()
             val urlAccess = binding.edUrlAccess.text.toString()
-            val uriLocalImage = binding.txtImgName.text.toString().removePrefix("name:").trim()
+            val uriLocalImage = viewModel.getUriImage().value ?: ""
 
             val chosenTopics = binding.chipGroupTopic.children
                     .toList()
@@ -148,6 +147,15 @@ class BroadcastActivity : AppCompatActivity() {
                 }
             }
         }
+
+        viewModel.getUriImage().observe(this){
+            Glide.with(this)
+                    .load(it)
+                    .into(binding.imgChosenPic)
+
+            isImgChosen(it.isNotEmpty())
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -155,15 +163,9 @@ class BroadcastActivity : AppCompatActivity() {
             val image: Image? = ImagePicker.getFirstImageOrNull(data)
             if (image != null) {
                 binding.txtImgName.text = getString(R.string.img_name, image.path)
-
-                Glide.with(this)
-                        .load(image.path)
-                        .into(binding.imgChosenPic)
-                isImgChosen(true)
+                viewModel.setUriImage(image.path)
                 return
             }
-            // no need else branch, it returned, code below wont be executed when image not null
-            isImgChosen(false)
         }
 
         super.onActivityResult(requestCode, resultCode, data)
@@ -172,7 +174,6 @@ class BroadcastActivity : AppCompatActivity() {
     private fun setbtnBroadCastEnabled(isEnabled: Boolean) {
         binding.btnBroadcast.isEnabled = isEnabled
     }
-
 
     private fun buildChip(text: String, id : String): Chip {
         return  Chip(ContextThemeWrapper(this@BroadcastActivity,R.style.Widget_MaterialComponents_Chip_Choice)).apply {
@@ -194,7 +195,16 @@ class BroadcastActivity : AppCompatActivity() {
         }
     }
 
-    private fun isImgChosen(choosen: Boolean) {
+    private fun isImgChosen(showImage: Boolean) {
+        with(binding) {
+            txtImgRatio.isVisible = !showImage
+            btnBrowseImg.isVisible = !showImage
+
+            imgChosenPic.isVisible = showImage
+            btnDelImg.isVisible = showImage
+        }
+
+        /*
         if (choosen) {
             binding.txtImgRatio.visibility = View.GONE
             binding.btnBrowseImg.visibility = View.GONE
@@ -207,7 +217,7 @@ class BroadcastActivity : AppCompatActivity() {
 
             binding.imgChosenPic.visibility = View.GONE
             binding.btnDelImg.visibility = View.GONE
-        }
+        }*/
     }
 
 }

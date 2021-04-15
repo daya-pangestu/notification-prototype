@@ -16,15 +16,17 @@ import javax.inject.Inject
 class BroadcastViewModel
 @Inject
 constructor(
-    private val fireStore: FirebaseFirestore,
-    private val broadCastInfoUseCase: BroadCastInfoUseCase,
-    private val getAllTopicUseCase: GetAllTopicUseCase
-) :ViewModel() {
+        private val fireStore: FirebaseFirestore,
+        private val broadCastInfoUseCase: BroadCastInfoUseCase,
+        private val getAllTopicUseCase: GetAllTopicUseCase
+) : ViewModel() {
 
+    //broadcasting
     private val _broadcastInfoLiveData = MutableLiveData<Info>()
     fun broadCastInfo(info: Info) {
         _broadcastInfoLiveData.value = info
     }
+
     val broadcastingLiveData = _broadcastInfoLiveData.switchMap { info ->
         liveData {
             val broadCastedRes = broadCastInfoUseCase(info)
@@ -32,13 +34,28 @@ constructor(
         }
     }
 
+    //getting topic for broadcast
     private val _getAllDefaultTopic = liveData {
         emit(Resource.loading())
         val listTopic = getAllTopicUseCase(Unit)
         emit(listTopic)
     }
+
     fun getTopic(): LiveData<Resource<List<Topic>>> {
         return _getAllDefaultTopic
+    }
+
+    // Image for broadcast
+    private val _uriImageLiveData = MutableLiveData("")
+    fun setUriImage(uriImage: String) {
+        _uriImageLiveData.value = uriImage
+    }
+
+    fun getUriImage(): MutableLiveData<String> {
+        return _uriImageLiveData
+    }
+    fun deleteUriImage() {
+        _uriImageLiveData.value = ""
     }
 }
 
