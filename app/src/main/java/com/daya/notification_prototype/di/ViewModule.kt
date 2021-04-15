@@ -17,7 +17,7 @@ object ViewModule {
     @Provides
     fun provideFlexboxLayoutManager(@ActivityContext context :Context): FlexboxLayoutManager {
         return FlexboxLayoutManager(context).apply {
-            flexDirection = FlexDirection.COLUMN
+            flexDirection = FlexDirection.ROW
             justifyContent = JustifyContent.SPACE_EVENLY
         }
     }
