@@ -11,20 +11,19 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.daya.notification_prototype.R
-import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.databinding.ActivityMainBinding
 import com.daya.notification_prototype.util.toast
 import com.daya.notification_prototype.view.broadcast.BroadcastActivity
+import com.daya.notification_prototype.view.login.LoginActivity
+import com.daya.notification_prototype.view.main.adapter.InfoPagingAdapter
+import com.daya.notification_prototype.view.main.adapter.InfoPagingLoadingAdapter
 import com.daya.notification_prototype.view.settings.SettingsActivity
-import com.google.firebase.messaging.FirebaseMessaging
+import com.google.android.flexbox.FlexboxLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -92,7 +91,15 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
-        else -> super.onOptionsItemSelected(item)
+            R.id.menu_logout -> {
+                //todo add confirmation to logout dialog
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }
