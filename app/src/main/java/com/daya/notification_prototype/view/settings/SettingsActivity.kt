@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import com.daya.notification_prototype.R
 import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.databinding.ActivitySettingsBinding
 import com.daya.notification_prototype.util.toast
@@ -28,9 +27,13 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val topicAdapter = TopicAdapter{ compoundView, isChecked ->
+        val topicAdapter = TopicAdapter{ topic,compoundView, isChecked ->
             toast("${compoundView.text} $isChecked")
-            //Todo subscribe / unsubscribe topic
+                if (isChecked) {
+                     settingsViewModel.unsubscribeTopic(topic)
+                } else {
+                    settingsViewModel.subscribeTopic(topic)
+                }
         }
 
         binding.rvTopic.apply {
@@ -58,6 +61,7 @@ class SettingsActivity : AppCompatActivity() {
 
      private fun setProgress(isVisible : Boolean) {
          binding.progressBar.isVisible = isVisible
+         binding.tvTopic.isVisible = !isVisible
          binding.rvTopic.isVisible = !isVisible
     }
 }
