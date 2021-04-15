@@ -12,12 +12,12 @@ constructor(
         return topicDataSource.getDefaultTopic()
     }
 
-    fun subscribeTopic(topics: Topic) {
-        topicDataSource.subscribeToTopic(topics)
+    suspend fun subscribeTopic(topics: TopicNet): Boolean {
+        return topicDataSource.subscribeToTopic(topics)
     }
 
-    fun unSubscribeTopic(topic: Topic) {
-        topicDataSource.unsubscribeToTopic(topic)
+    suspend fun unSubscribeTopic(topic: TopicNet): Boolean {
+        return topicDataSource.unsubscribeToTopic(topic)
     }
 
 }

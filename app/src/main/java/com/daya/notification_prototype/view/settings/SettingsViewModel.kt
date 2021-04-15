@@ -21,4 +21,13 @@ constructor(
     }
 
     val getTopicWithSubscribedStatusLiveData get() = _getTopicWithSubscribeStatus
+
+
+    fun subscribeTopic() {
+
+    }
+
+    fun unsubscribeTopic() {
+
+    }
 }

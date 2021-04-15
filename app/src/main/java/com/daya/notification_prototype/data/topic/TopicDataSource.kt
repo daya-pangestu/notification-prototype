@@ -16,8 +16,8 @@ import kotlin.coroutines.resumeWithException
 
 interface TopicDataSource {
     suspend fun getDefaultTopic(): List<TopicNet>
-    fun subscribeToTopic(topic: Topic)
-    fun unsubscribeToTopic(topic: Topic)
+    suspend fun subscribeToTopic(topic: TopicNet) : Boolean
+    suspend fun unsubscribeToTopic(topic: TopicNet) : Boolean
     suspend fun getSubscribedTopic(): List<String>
 }
 
@@ -38,25 +38,31 @@ constructor(
         }.toList()
     }
 
-    override fun subscribeToTopic(topic: Topic) {
+    override suspend fun subscribeToTopic(topic: TopicNet) : Boolean = suspendCancellableCoroutine { continuation ->
         messaging.subscribeToTopic(topic.topicName)
             .addOnCompleteListener { task ->
-                var msg = "subscribing to ${topic.topicName} success"
-                if (!task.isSuccessful) {
-                    msg = "subscribing to ${topic.topicName} failed"
+                val isSuccess = task.isSuccessful
+                val msg = if (isSuccess) {
+                    "subscribing to ${topic.topicName} success"
+                } else {
+                    "subscribing to ${topic.topicName} failed"
                 }
                 Timber.i(msg)
+                continuation.resume(isSuccess)
             }
     }
 
-    override fun unsubscribeToTopic(topic: Topic) {
+    override suspend fun unsubscribeToTopic(topic: TopicNet) : Boolean = suspendCancellableCoroutine {continuation ->
         messaging.unsubscribeFromTopic(topic.topicName)
             .addOnCompleteListener { task ->
-                var msg = "unsubscribed to ${topic.topicName} success"
-                if (!task.isSuccessful) {
-                    msg = "unsubscribed to ${topic.topicName} failed"
+                val isSuccess = task.isSuccessful
+                val msg = if (!task.isSuccessful) {
+                    "unsubscribed to ${topic.topicName} success"
+                } else {
+                    "unsubscribed to ${topic.topicName} failed"
                 }
                 Timber.i(msg)
+                continuation.resume(isSuccess)
             }
     }
 
