@@ -5,7 +5,7 @@ import javax.inject.Inject
 class TopicRepository
 @Inject
 constructor(
-    private val topicDataSource: TopicDataSource
+    private val topicDataSource: FirebaseTopicDataSource
 ) {
 
     suspend fun getDefaultTopic(): List<TopicNet> {
