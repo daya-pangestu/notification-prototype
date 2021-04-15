@@ -7,6 +7,7 @@ import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
@@ -16,6 +17,7 @@ import com.daya.notification_prototype.data.Resource
 import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.databinding.ActivityBroadcastBinding
+import com.daya.notification_prototype.util.toast
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode
 import com.esafirm.imagepicker.model.Image
@@ -39,38 +41,50 @@ class BroadcastActivity : AppCompatActivity() {
             title = "Broadcast Info"
             setDisplayHomeAsUpEnabled(true)
         }
-            bindProgressButton(binding.btnBroadcast)
-            binding.btnBroadcast.attachTextChangeAnimator()
+        bindProgressButton(binding.btnBroadcast)
+        binding.btnBroadcast.attachTextChangeAnimator()
 
-            isImgChosen(false)
-            binding.btnBrowseImg.setOnClickListener {
-                ImagePicker.create(this@BroadcastActivity)
+        isImgChosen(false)
+        binding.btnBrowseImg.setOnClickListener {
+            ImagePicker.create(this@BroadcastActivity)
                     .returnMode(ReturnMode.ALL)
                     .single()
                     .folderMode(true)
                     .includeVideo(false)
                     .start()
-            }
+        }
 
+        viewModel.getTopic().observe(this) { topics ->
+            when (topics) {
+                is Resource.Loading ->{
+                    setbtnBroadCastEnabled(false)
+                }
+                is Resource.Success -> {
+                    topics.data.forEach { topic ->
+                        binding.chipGroupTopic.addView(buildChip(topic.topicName, topic.topicId))
+                    }
 
-            viewModel.getTopic().observe(this){ topics ->
-                topics.forEach { topic ->
-                    binding.chipGroupTopic.addView(buildChip(topic.topicName,topic.topicId))
+                    setbtnBroadCastEnabled(true)
+                }
+                is Resource.Error -> {
+                    toast("error for getting topic to subscribe")
+                    setbtnBroadCastEnabled(false)
                 }
             }
+        }
 
-            binding.btnDelImg.setOnClickListener {
-                binding.imgChosenPic.setImageBitmap(null)
-                isImgChosen(false)
-            }
+        binding.btnDelImg.setOnClickListener {
+            binding.imgChosenPic.setImageBitmap(null)
+            isImgChosen(false)
+        }
 
-            binding.btnBroadcast.setOnClickListener {
-                val titleText = binding.edTitle.text.toString()
-                val descText = binding.edDesc.text.toString()
-                val urlAccess = binding.edUrlAccess.text.toString()
-                val uriLocalImage = binding.txtImgName.text.toString().removePrefix("name:").trim()
+        binding.btnBroadcast.setOnClickListener {
+            val titleText = binding.edTitle.text.toString()
+            val descText = binding.edDesc.text.toString()
+            val urlAccess = binding.edUrlAccess.text.toString()
+            val uriLocalImage = binding.txtImgName.text.toString().removePrefix("name:").trim()
 
-                val chosenTopics = binding.chipGroupTopic.children
+            val chosenTopics = binding.chipGroupTopic.children
                     .toList()
                     .filter {
                         (it as Chip).isChecked
@@ -83,59 +97,58 @@ class BroadcastActivity : AppCompatActivity() {
                         )
                     }
 
-                if (chosenTopics.isEmpty()){
-                    Toast.makeText(it.context, "atleast 1 chip must be checked", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                if (titleText.isEmpty()){
-                    Toast.makeText(it.context, "title mustn't empty", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                if (descText.isEmpty()){
-                    Toast.makeText(it.context, "desc mustn't empty", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                if (urlAccess.isEmpty()){
-                    Toast.makeText(it.context, "url access mustn't empty", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                binding.btnBroadcast.showProgress {
-                    buttonText = "broadcasting"
-                    progressColor = Color.WHITE
-                }
-
-                viewModel.broadCastInfo(
-                    Info(
-                        title = titleText,
-                        description = descText,
-                        urlAccess = urlAccess,
-                        topics = chosenTopics,
-                        urlImage = uriLocalImage
-                    )
-                )
+            if (chosenTopics.isEmpty()) {
+                Toast.makeText(it.context, "atleast 1 chip must be checked", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (titleText.isEmpty()) {
+                Toast.makeText(it.context, "title mustn't empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (descText.isEmpty()) {
+                Toast.makeText(it.context, "desc mustn't empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (urlAccess.isEmpty()) {
+                Toast.makeText(it.context, "url access mustn't empty", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
-            viewModel.broadcastinfoLiveData.observe(this){
-                when (it) {
-                    is Resource.Loading -> {
-                        val progress = it.progress
-                        binding.btnBroadcast.showProgress {
-                            buttonText = "$progress"
-                            progressColor = Color.WHITE
-                        }
+            binding.btnBroadcast.showProgress {
+                buttonText = "broadcasting"
+                progressColor = Color.WHITE
+            }
+
+            viewModel.broadCastInfo(
+                    Info(
+                            title = titleText,
+                            description = descText,
+                            urlAccess = urlAccess,
+                            topics = chosenTopics,
+                            urlImage = uriLocalImage
+                    )
+            )
+        }
+
+        viewModel.broadcastingLiveData.observe(this) {
+            when (it) {
+                is Resource.Loading -> {
+                    val progress = it.progress
+                    binding.btnBroadcast.showProgress {
+                        buttonText = "$progress"
+                        progressColor = Color.WHITE
                     }
-                    is Resource.Success -> {
-                        binding.btnBroadcast.hideProgress("info submitted")
-                    }
-                    is Resource.Error -> {
-                        binding.btnBroadcast.hideProgress("failed, retry?")
-                        Toast.makeText(this@BroadcastActivity, "${it.exceptionMessage}", Toast.LENGTH_LONG).show()
-                    }
+                }
+                is Resource.Success -> {
+                    binding.btnBroadcast.hideProgress("info submitted")
+                }
+                is Resource.Error -> {
+                    binding.btnBroadcast.hideProgress("failed, retry?")
+                    Toast.makeText(this@BroadcastActivity, "${it.exceptionMessage}", Toast.LENGTH_LONG).show()
                 }
             }
         }
-
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
@@ -154,6 +167,10 @@ class BroadcastActivity : AppCompatActivity() {
         }
 
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun setbtnBroadCastEnabled(isEnabled: Boolean) {
+        binding.btnBroadcast.isEnabled = isEnabled
     }
 
 

@@ -5,7 +5,9 @@ import androidx.core.content.edit
 import com.daya.notification_prototype.data.topic.FirebaseTopicDataSource
 import com.daya.notification_prototype.data.topic.TopicNet
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SettingRepository
 @Inject
 constructor(
@@ -27,7 +29,7 @@ constructor(
     }
 
     suspend fun getAllTopic(): List<TopicNet> {
-       return topicDataSource.getDefaultTopic()
+        return topicDataSource.getDefaultTopic()
     }
 
     suspend fun getSubScribedTopic(): List<String> {
