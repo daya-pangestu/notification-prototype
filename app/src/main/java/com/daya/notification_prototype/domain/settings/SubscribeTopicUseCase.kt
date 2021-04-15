@@ -6,8 +6,11 @@ import com.daya.notification_prototype.di.IoDispatcher
 import com.daya.notification_prototype.domain.UseCase
 import com.daya.notification_prototype.util.mapToTopicNet
 import kotlinx.coroutines.CoroutineDispatcher
+import javax.inject.Inject
 
-class SubscribeTopicUseCase(
+class SubscribeTopicUseCase
+@Inject
+constructor(
         @IoDispatcher coroutineDispatcher: CoroutineDispatcher,
         private val repo : TopicRepository
 ) : UseCase<Topic,Boolean>(coroutineDispatcher) {
