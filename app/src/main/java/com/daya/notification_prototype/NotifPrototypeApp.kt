@@ -4,6 +4,7 @@ import android.app.Application
 import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.domain.pref.IsFirstTimeUseCase
 import com.daya.notification_prototype.domain.pref.SetFirstTimeUseCase
+import com.daya.notification_prototype.domain.settings.SubscribeTopicUseCase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
@@ -29,6 +30,9 @@ class NotifPrototypeApp : Application() {
     lateinit var setFirstTimeUseCase: SetFirstTimeUseCase
 
     @Inject
+    lateinit var subscribeTopicUseCase: SubscribeTopicUseCase
+
+    @Inject
     lateinit var messaging : FirebaseMessaging
 
     @Inject
@@ -37,33 +41,24 @@ class NotifPrototypeApp : Application() {
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) Timber.plant(DebugTree())
-
         mainScope.launch {
-            try {
-                val isFirstTime = isFirstTimeUseCase()
-                if (isFirstTime) {
-
+            val isFirstTime = isFirstTimeUseCase()
+            if (isFirstTime) {
+                try {
                     val topicQuerySnap = firestore.collection("topics").get().await()
                     val topics = topicQuerySnap.documents.map {
                         val topid = it.id
                         val name = it.data?.get("topicName").toString()
                         Topic(topicId = topid, topicName = name)
                     }
-
                     topics.forEach {
-                        messaging.subscribeToTopic(it.topicName).addOnCompleteListener { task ->
-                            var msg = "subscring to ${it.topicName} succes"
-                            if (!task.isSuccessful) {
-                                msg = "subscribing to ${it.topicName} failed"
-                            }
-                            Timber.i(msg)
-                        }
+                        subscribeTopicUseCase(it)
                     }
+                } catch (e: Exception) {
+                    Timber.e(e.localizedMessage)
+                } finally {
+                    setFirstTimeUseCase(false)
                 }
-            } catch (e: Exception) {
-                Timber.e(e.localizedMessage)
-            } finally {
-                setFirstTimeUseCase(false)
             }
         }
     }

@@ -57,5 +57,4 @@ data class Info(
     val status: String = "requested",
     val topics: List<Topic> = emptyList(),
     val broadcastRequested: Date? = null
-) : Parcelable {
-}
+) : Parcelable

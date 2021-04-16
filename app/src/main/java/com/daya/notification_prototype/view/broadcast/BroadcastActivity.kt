@@ -5,10 +5,12 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.MenuItem
+import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.daya.notification_prototype.R
@@ -17,6 +19,7 @@ import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.databinding.ActivityBroadcastBinding
 import com.daya.notification_prototype.util.toast
+import com.daya.notification_prototype.view.broadcast.adapter.TopicAdapter
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode
 import com.esafirm.imagepicker.model.Image
@@ -24,13 +27,18 @@ import com.github.razir.progressbutton.attachTextChangeAnimator
 import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BroadcastActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBroadcastBinding
     private val viewModel by viewModels<BroadcastViewModel>()
+
+    @Inject
+    lateinit var flexboxLayoutManager: FlexboxLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,16 +61,26 @@ class BroadcastActivity : AppCompatActivity() {
                     .start()
         }
 
+        val topicAdapter = TopicAdapter{ topic: Topic, _: CompoundButton, isCheked: Boolean ->
+            if (isCheked) {
+                viewModel.addTopic(topic)
+            } else {
+                viewModel.removeTopic(topic)
+            }
+        }
+
+        binding.rvBroadcastTopic.apply {
+            adapter = topicAdapter
+            layoutManager = flexboxLayoutManager
+        }
+
         viewModel.getTopic().observe(this) { topics ->
             when (topics) {
                 is Resource.Loading ->{
                     setbtnBroadCastEnabled(false)
                 }
                 is Resource.Success -> {
-                    topics.data.forEach { topic ->
-                        binding.chipGroupTopic.addView(buildChip(topic.topicName, topic.topicId))
-                    }
-
+                    topicAdapter.submitList(topics.data)
                     setbtnBroadCastEnabled(true)
                 }
                 is Resource.Error -> {
@@ -83,18 +101,7 @@ class BroadcastActivity : AppCompatActivity() {
             val urlAccess = binding.edUrlAccess.text.toString()
             val uriLocalImage = viewModel.getUriImage().value ?: ""
 
-            val chosenTopics = binding.chipGroupTopic.children
-                    .toList()
-                    .filter {
-                        (it as Chip).isChecked
-                    }
-                    .map {
-                        val stringTopic = (it as Chip).text.toString().replace(" ", "_")
-                        Topic(
-                                topicName = stringTopic,
-                                topicId = it.tag as String
-                        )
-                    }
+            val chosenTopics = viewModel.getChoosenTopic()
 
             if (chosenTopics.isEmpty()) {
                 Toast.makeText(it.context, "atleast 1 chip must be checked", Toast.LENGTH_SHORT).show()
@@ -123,7 +130,7 @@ class BroadcastActivity : AppCompatActivity() {
                             title = titleText,
                             description = descText,
                             urlAccess = urlAccess,
-                            topics = chosenTopics,
+                            topics = chosenTopics.toList(),
                             urlImage = uriLocalImage
                     )
             )
@@ -155,7 +162,6 @@ class BroadcastActivity : AppCompatActivity() {
 
             isImgChosen(it.isNotEmpty())
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -167,7 +173,6 @@ class BroadcastActivity : AppCompatActivity() {
                 return
             }
         }
-
         super.onActivityResult(requestCode, resultCode, data)
     }
 

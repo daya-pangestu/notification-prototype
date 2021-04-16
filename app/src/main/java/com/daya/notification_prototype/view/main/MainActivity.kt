@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -23,11 +22,9 @@ import com.daya.notification_prototype.view.login.LoginActivity
 import com.daya.notification_prototype.view.main.adapter.InfoPagingAdapter
 import com.daya.notification_prototype.view.main.adapter.InfoPagingLoadingAdapter
 import com.daya.notification_prototype.view.settings.SettingsActivity
-import com.google.android.flexbox.FlexboxLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -45,6 +42,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(DETAIL_INFO_EXTRA,info)
             startActivity(intent)
         }
+
 
         infoPagingAdapter.addLoadStateListener { loadState: CombinedLoadStates ->
             if (loadState.refresh is LoadState.Loading) {

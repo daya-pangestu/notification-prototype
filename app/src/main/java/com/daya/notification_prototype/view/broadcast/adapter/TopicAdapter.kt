@@ -1,4 +1,4 @@
-package com.daya.notification_prototype.view.settings.adapter
+package com.daya.notification_prototype.view.broadcast.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.databinding.ItemTopicBinding
 
-class TopicAdapter (private val onCheckedChangeListener : (Topic,CompoundButton,Boolean) -> Unit): ListAdapter<Topic, TopicAdapter.TopicViewHolder>(topicDiffUtil) {
+class TopicAdapter (private val onCheckedChangeListener : (Topic, CompoundButton, Boolean) -> Unit): ListAdapter<Topic, TopicAdapter.TopicViewHolder>(topicDiffUtil) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicViewHolder {
@@ -23,16 +23,10 @@ class TopicAdapter (private val onCheckedChangeListener : (Topic,CompoundButton,
     }
 
     inner class TopicViewHolder(private val binding: ItemTopicBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Topic, onCheckedChangeListener: (Topic,CompoundButton, Boolean) -> Unit) {
+        fun bind(item: Topic, onCheckedChangeListener: (Topic, CompoundButton, Boolean) -> Unit) {
             binding.chipTopic.apply {
                 text = item.topicName
-                isChecked = item.isUserSubscribe
-
                 setOnCheckedChangeListener { buttonView, isChecked ->
-                    if (item.isUnsubscribeAble){
-                        buttonView.isChecked = true
-                        return@setOnCheckedChangeListener
-                    }
                     onCheckedChangeListener(item, buttonView, isChecked)
                 }
             }
@@ -45,6 +39,4 @@ class TopicAdapter (private val onCheckedChangeListener : (Topic,CompoundButton,
             override fun areContentsTheSame(oldItem: Topic, newItem: Topic): Boolean  = oldItem == newItem
         }
     }
-
-
 }

@@ -33,17 +33,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_background_link"
-        android:ellipsize="end"
-        android:textIsSelectable="true"
         android:gravity="center_vertical"
-        android:foreground="?attr/selectableItemBackground"
         android:layout_marginTop="8dp"
-        android:paddingHorizontal="16dp"
+       android:paddingHorizontal="16dp"
         android:paddingVertical="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         android:maxLines="1"
-        tools:text="@tools:sample/lorem/random" />
+        tools:text="@tools:sample/lorem/random"
+        android:enabled="true"
+        android:textIsSelectable="true"
+        android:focusable="true"
+        android:longClickable="true"
+        />
 
     <View
         android:layout_width="match_parent"

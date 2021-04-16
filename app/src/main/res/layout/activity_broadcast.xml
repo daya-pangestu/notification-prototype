@@ -167,11 +167,19 @@
             android:layout_marginTop="8dp"
             />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chip_group_topic"
-            style="@style/Widget.MaterialComponents.ChipGroup"
+<!--        <com.google.android.material.chip.ChipGroup-->
+<!--            android:id="@+id/chip_group_topic"-->
+<!--            style="@style/Widget.MaterialComponents.ChipGroup"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_broadcast_topic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_topic"
+            tools:itemCount="2"
+            />
 
         <Button
             android:id="@+id/btn_broadcast"

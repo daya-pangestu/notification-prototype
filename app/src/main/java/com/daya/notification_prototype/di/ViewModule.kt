@@ -9,6 +9,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ActivityComponent::class)
@@ -18,7 +19,9 @@ object ViewModule {
     fun provideFlexboxLayoutManager(@ActivityContext context :Context): FlexboxLayoutManager {
         return FlexboxLayoutManager(context).apply {
             flexDirection = FlexDirection.ROW
-            justifyContent = JustifyContent.SPACE_EVENLY
+            justifyContent = JustifyContent.FLEX_START
         }
     }
+
+
 }

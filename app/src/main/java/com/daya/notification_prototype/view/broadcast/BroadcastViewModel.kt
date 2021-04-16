@@ -45,6 +45,20 @@ constructor(
         return _getAllDefaultTopic
     }
 
+    //save selected topic
+    private val _chosenTopic = mutableSetOf<Topic>()
+
+    fun addTopic(topic: Topic) {
+        _chosenTopic.add(topic)
+    }
+
+    fun removeTopic(topic: Topic) {
+        _chosenTopic.remove(topic)
+    }
+
+    fun getChoosenTopic() = _chosenTopic
+
+
     // Image for broadcast
     private val _uriImageLiveData = MutableLiveData("")
     fun setUriImage(uriImage: String) {
@@ -57,5 +71,7 @@ constructor(
     fun deleteUriImage() {
         _uriImageLiveData.value = ""
     }
+
+
 }
 
