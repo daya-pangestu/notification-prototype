@@ -14,7 +14,7 @@ class TopicAdapter (private val onCheckedChangeListener : (Topic,CompoundButton,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicViewHolder {
         val binding = ItemTopicBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return TopicViewHolder(binding,)
+        return TopicViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {

@@ -5,20 +5,18 @@
     android:layout_width="match_parent"
     android:padding="16dp"
     android:layout_height="match_parent"
-    tools:context=".view.DetailActivity">
+    tools:context=".view.detail.DetailActivity">
 
     <ImageView
         android:id="@+id/img_banner"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:adjustViewBounds="true"
-
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/contoh" />
-
 
     <TextView
         android:id="@+id/textView"
@@ -31,17 +29,20 @@
         tools:layout_editor_absoluteX="16dp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tv_url_access"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_background_link"
         android:ellipsize="end"
+        android:textIsSelectable="true"
+        android:gravity="center_vertical"
+        android:foreground="?attr/selectableItemBackground"
         android:layout_marginTop="8dp"
         android:paddingHorizontal="16dp"
         android:paddingVertical="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:maxLines="1"
+        android:maxLines="1"
         tools:text="@tools:sample/lorem/random" />
 
     <View
@@ -89,7 +90,7 @@
         app:layout_constraintEnd_toStartOf="@+id/btn_share_link"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_url_access" />
 
     <Button
         android:id="@+id/btn_share_link"

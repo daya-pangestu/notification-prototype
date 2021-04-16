@@ -13,9 +13,12 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.daya.notification_prototype.R
+import com.daya.notification_prototype.data.info.Info
 import com.daya.notification_prototype.databinding.ActivityMainBinding
 import com.daya.notification_prototype.util.toast
 import com.daya.notification_prototype.view.broadcast.BroadcastActivity
+import com.daya.notification_prototype.view.detail.DetailActivity
+import com.daya.notification_prototype.view.detail.DetailActivity.Companion.DETAIL_INFO_EXTRA
 import com.daya.notification_prototype.view.login.LoginActivity
 import com.daya.notification_prototype.view.main.adapter.InfoPagingAdapter
 import com.daya.notification_prototype.view.main.adapter.InfoPagingLoadingAdapter
@@ -37,8 +40,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val infoPagingAdapter = InfoPagingAdapter{
-            Toast.makeText(this@MainActivity, it.title, Toast.LENGTH_SHORT).show()
+        val infoPagingAdapter = InfoPagingAdapter{info : Info ->
+            val intent = Intent(this@MainActivity, DetailActivity::class.java)
+            intent.putExtra(DETAIL_INFO_EXTRA,info)
+            startActivity(intent)
         }
 
         infoPagingAdapter.addLoadStateListener { loadState: CombinedLoadStates ->

@@ -30,7 +30,6 @@ constructor(
 
     val getTopicWithSubscribedStatusLiveData get() = _getTopicWithSubscribeStatus
 
-
      fun subscribeTopic(topic: Topic) {
         viewModelScope.launch {
              when (val isSubscribeSuccess = subscribeTopicUseCase(topic)) {

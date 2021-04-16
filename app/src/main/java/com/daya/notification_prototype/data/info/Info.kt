@@ -1,5 +1,7 @@
 package com.daya.notification_prototype.data.info
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Ignore
@@ -7,6 +9,8 @@ import com.daya.notification_prototype.data.topic.Topic
 import com.daya.notification_prototype.data.topic.TopicEntity
 import com.daya.notification_prototype.data.topic.TopicNet
 import com.google.firebase.firestore.ServerTimestamp
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import java.util.Date
 import kotlin.String
 
@@ -43,6 +47,7 @@ data class InfoEntity
             : this(senderId, title, description, urlAccess, urlImage, status, broadcastRequested, emptyList())
 }
 //general info to display in ui
+@Parcelize
 data class Info(
     var senderId: String? = "",
     val title: String  = "",
@@ -52,4 +57,5 @@ data class Info(
     val status: String = "requested",
     val topics: List<Topic> = emptyList(),
     val broadcastRequested: Date? = null
-)
+) : Parcelable {
+}
