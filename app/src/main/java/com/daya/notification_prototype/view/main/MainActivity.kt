@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         val infoPagingAdapter = InfoPagingAdapter{info : Info ->
             val intent = Intent(this@MainActivity, DetailActivity::class.java)
             intent.putExtra(DETAIL_INFO_EXTRA,info)
@@ -44,11 +45,18 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        binding.swipeRefresh.setOnRefreshListener {
+            infoPagingAdapter.refresh()
+        }
+
+
         infoPagingAdapter.addLoadStateListener { loadState: CombinedLoadStates ->
             if (loadState.refresh is LoadState.Loading) {
                 binding.progressBar.isVisible = true
+                binding.swipeRefresh.isRefreshing = true
             } else {
                 binding.progressBar.isVisible = false
+                binding.swipeRefresh.isRefreshing = false
 
                 val errorState = when {
                     loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
@@ -81,6 +89,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.main_menu,menu)
         return true
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

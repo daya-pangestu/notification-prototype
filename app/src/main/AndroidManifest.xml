@@ -22,14 +22,14 @@
             android:name=".view.login.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".view.main.MainActivity">
-
-        </activity>
-        <activity android:name=".view.broadcast.BroadcastActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".view.broadcast.BroadcastActivity" >
+
         </activity>
         <activity android:name=".view.settings.SettingsActivity" >
 
