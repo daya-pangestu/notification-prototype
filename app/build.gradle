@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'kotlin-parcelize'
@@ -10,7 +11,7 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
+    //buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.daya.notification_prototype"
@@ -96,8 +97,9 @@ dependencies {
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
-    implementation "com.google.dagger:hilt-android:2.35"
+    implementation 'com.google.dagger:hilt-android:2.37'
     kapt 'com.google.dagger:hilt-compiler:2.37'
+
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
 

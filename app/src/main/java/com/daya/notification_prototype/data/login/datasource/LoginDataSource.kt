@@ -12,12 +12,12 @@ class LoginDataSource
 constructor(){
 
     fun login(username: String, password: String): Resource<LoggedInUser> {
-        try {
+        return try {
             // TODO: handle loggedInUser authentication
             val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Resource.success(fakeUser)
+            Resource.success(fakeUser)
         } catch (e: Throwable) {
-            return Resource.error("Error logging in ${e.localizedMessage}")
+            Resource.error("Error logging in ${e.localizedMessage}")
         }
     }
 

@@ -1,20 +1,10 @@
 package com.daya.notification_prototype.view.login
 
-import android.app.Activity
 import android.content.Intent
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import com.daya.notification_prototype.R
 import com.daya.notification_prototype.databinding.ActivityLoginBinding
 import com.daya.notification_prototype.util.toast
@@ -32,7 +22,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-    private val loginViewModel by viewModels<LoginViewModel>()
     private lateinit var binding : ActivityLoginBinding
 
     @Inject
@@ -69,8 +58,6 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Timber.i("signInWithCredential:success")
-                    val user = firebaseAuth.currentUser
-
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
